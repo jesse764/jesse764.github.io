@@ -1,0 +1,144 @@
+
+
+  <!DOCTYPE html>
+  <html lang="en">
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="renderer" content="webkit">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+  <meta name="description" content=嘿，我是jesse～这是我的子站，用于展示Hexo主题：MiHoYo。欢迎访问！ >
+  <meta name="keywords" content=hexo,theme,MiHoYo >
+
+  <head>
+    <title>
+       [ Hexo ]
+    </title>
+  <meta name="generator" content="Hexo 7.3.0"></head>
+
+  <body>
+
+    <link rel="stylesheet" href="/css/header.css">
+<div class="header">
+  <div class="logo">
+    <span class="pull-left">
+      <a id="site-name" href="/">
+        jesse&#39;s blog
+      </a>
+    </span>
+  </div>
+  <ul class="nav-list">
+    
+      <li>
+        <a href="/">
+          首页
+        </a>
+      </li>
+      
+      <li>
+        <a href="/about">
+          关于
+        </a>
+      </li>
+      
+  </ul>
+</div>
+
+      <!--<link rel="stylesheet" href="/css/top-header.css">
+<div id="top-bar" class="fixed">
+
+  <a class="goto-top" href="#"></a>
+  <ul class="bar-list bar-list-1">
+    
+      <li>
+        <p>
+          <a href="/">
+            <text class="bar-text bar-p1">
+              首页
+            </text>
+            <text class="bar-text bar-p2"></text>
+          </a>
+          <text class="bar-p3">/</text>
+        </p>
+      </li>
+      
+      <li>
+        <p>
+          <a href="/about">
+            <text class="bar-text bar-p1">
+              关于
+            </text>
+            <text class="bar-text bar-p2"></text>
+          </a>
+          <text class="bar-p3">/</text>
+        </p>
+      </li>
+      
+  </ul>
+</div>-->
+
+        <div id="content-outer">
+          <div class="content-inner">
+            <link rel="stylesheet" href="/css/post.css">
+<div class="posts">
+  <a href="/index.html"><i class="fa fa-home
+replay-btn" aria-hidden="true"></i></a>
+  <div class="post-title">
+    <p>
+      
+    </p>
+    <hr>
+  </div>
+  <div class="post-content">
+    <hr>
+<h2 id="title-非对称加密-公钥加密"><a href="#title-非对称加密-公钥加密" class="headerlink" title="title:非对称加密(公钥加密)"></a>title:非对称加密(公钥加密)</h2><p><img src="https://cdn.jsdelivr.net/gh/jesse764/Picture/202504062117806.png"></p>
+<h1 id="非对称密码体制概述"><a href="#非对称密码体制概述" class="headerlink" title="非对称密码体制概述"></a>非对称密码体制概述</h1><p>非对称密码又称为公钥密码，意思为每对加密包含一个公钥（可能为他人所知）和一个私钥（可能不为所有人所知）。有效的安全需要保持私钥的私密性；公钥可以在不影响安全性的情况下公开分发。</p>
+<p>在使用<a target="_blank" rel="noopener" href="https://so.csdn.net/so/search?q=%E9%9D%9E%E5%AF%B9%E7%A7%B0%E5%8A%A0%E5%AF%86&spm=1001.2101.3001.7020">非对称加密</a>时，任何人都可以使用预期接收者的公钥对消息进行加密，但该加密消息只能使用接收者的私钥解密。</p>
+<p><strong>使用非对称加密进行身份验证</strong><br>也可以使用公钥加密进行身份验证，其中使用发件人的私钥对消息进行签名，并且可以由有权访问发件人公钥的任何人验证。发件人可以将消息与私钥结合起来，在消息上创建一个简短的数字签名。</p>
+<p>任何拥有发件人相应公钥的人都可以通过公钥解密后，将该消息与数字签名进行比较；如果签名与消息匹配，则验证消息的来源。</p>
+<h2 id="机密性"><a href="#机密性" class="headerlink" title="机密性"></a>机密性</h2><ul>
+<li>在通信双方需要相互通信机密信息时，接收方先生成一对公钥和私钥（私钥严格保密）</li>
+<li>接收方将公钥发送给发送方</li>
+<li>发送方使用公钥对信息进行加密</li>
+<li>发送方发送加密后的信息给接收方</li>
+<li>接收方通过自己的私钥对信息进行解密得到明文</li>
+</ul>
+<p><img src="https://cdn.jsdelivr.net/gh/jesse764/Picture/202504062123896.png"></p>
+<h2 id="优点"><a href="#优点" class="headerlink" title="优点"></a>优点</h2><ul>
+<li>不需要交换密钥，消除了密钥分配问题</li>
+<li>可用于数字签名，方便进行身份验证</li>
+<li>允许不可否认性，因此发件人不能拒绝发送消息</li>
+<li>解密密钥（私钥）不需要通过网络传输，提高了安全性</li>
+</ul>
+<h2 id="缺点"><a href="#缺点" class="headerlink" title="缺点"></a>缺点</h2><ul>
+<li>丢失私钥的情况下就无法解密</li>
+<li>公钥没有经过身份验证，所以没有人可以确保公钥属于指定的人</li>
+</ul>
+<h1 id="常见的非对称加密算法"><a href="#常见的非对称加密算法" class="headerlink" title="常见的非对称加密算法"></a>常见的非对称加密算法</h1><h2 id="RSA"><a href="#RSA" class="headerlink" title="RSA"></a>RSA</h2>
+  </div>
+  
+</div>
+          </div>
+        </div>
+
+        <link rel="stylesheet" href="/css/footer.css">
+<div class="bottom-outer">
+  <div class="copyright">©2021 - 2021 By Tanger</div>
+  <div class="framework-info">
+    <span>Power by</span>
+    <a class="a1" target="_blank" rel="noopener" href="https://hexo.io/">Hexo</a>
+    <span class="footer-separator">|</span>
+    <span>Theme by</span>
+    <a class="a2" target="_blank" rel="noopener" href="https://github.com/redhat123456/hexo-theme-MiHoYo">MiHoYo</a>
+  </div>
+</div>
+
+          
+            <!-- scripts list from theme config.yml -->
+            
+              <script src="/js/MiHoYo.js"></script>
+              
+                
+
+  </body>
+
+  </html>
